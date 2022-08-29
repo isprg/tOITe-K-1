@@ -1,163 +1,156 @@
 # ライブラリ等のインポート ==============================================
+from Classes.ClsImageProcessQR import ClsImageProcessQR
 import pyautogui
 import yaml
 import os
 
 from functions.ModeFuncBase import *
-from functions.ModeFuncIce import *
-from functions.ModeFuncPizza import *
-from functions.ModeFuncSea import *
-from functions.ModeFuncQR import *
+from functions.ModeFuncTutorial import *
+from functions.ModeFuncFinal import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
 
 if os.name == 'nt':
-	from Classes.ClsCtrlCardDummy import ClsCtrlCard
+    from Classes.ClsCtrlCardDummy import ClsCtrlCard
 else:
-	from Classes.ClsCtrlCard import ClsCtrlCard
-	from functions.AdminMode import AdminMode
+    from Classes.ClsCtrlCard import ClsCtrlCard
+    from functions.AdminMode import AdminMode
 
 import sys
 sys.path.append("./Classes")
-from ClsImageProcessQR import ClsImageProcessQR
 
 
 # 環境設定 =============================================================
 def setEnvironment():
-	if os.name == 'nt':
-		strPlatform = "WIN"
-	else:
-		strPlatform = "JETSON"
+    if os.name == 'nt':
+        strPlatform = "WIN"
+    else:
+        strPlatform = "JETSON"
 
-	sCameraNumber = 0
-	sSensorWidth = 640
-	sSensorHeight = 360
-	sMonitorWidth = 1024
-	sMonitorHeight = 600
-	tplWindowName = ("full",)
-	sFlipMode = 2
+    sCameraNumber = 0
+    sSensorWidth = 640
+    sSensorHeight = 360
+    sMonitorWidth = 1024
+    sMonitorHeight = 600
+    tplWindowName = ("full",)
+    sFlipMode = 2
 
-	proc = ClsImageProcessQR(
-		strPlatform,
-		sCameraNumber,
-		sSensorWidth,
-		sSensorHeight,
-		sMonitorWidth,
-		sMonitorHeight,
-		tplWindowName,
-		sFlipMode,
-	)
+    proc = ClsImageProcessQR(
+        strPlatform,
+        sCameraNumber,
+        sSensorWidth,
+        sSensorHeight,
+        sMonitorWidth,
+        sMonitorHeight,
+        tplWindowName,
+        sFlipMode,
+    )
 
-	return proc
+    return proc
 
 
 # モード別設定 =============================================================
 def setModeFuncsAndLayouts(blDebug):
-	dictWindow = createDictWindow()
-	dictWindow = updateDictWindow_Ice(dictWindow)
-	dictWindow = updateDictWindow_Pizza(dictWindow)
-	dictWindow = updateDictWindow_Sea(dictWindow)
-	dictWindow = updateDictWindow_QR(dictWindow)
+    dictWindow = createDictWindow()
+    dictWindow = updateDictWindow_Tutorial(dictWindow)
+    dictWindow = updateDictWindow_Final(dictWindow)
 
-	if blDebug == False:
-		for sKey in dictWindow:
-			window = dictWindow[sKey]
-			if window != "None":
-				window.set_cursor("none")
+    if blDebug == False:
+        for sKey in dictWindow:
+            window = dictWindow[sKey]
+            if window != "None":
+                window.set_cursor("none")
 
-	cState = ClsCtrlStateAndWindow("STANDBY", "BACKGROUND", dictWindow)
+    cState = ClsCtrlStateAndWindow("STANDBY", "BACKGROUND", dictWindow)
 
-	dictProc = createDictProc()
-	dictProc = updateDictProc_Ice(dictProc)
-	dictProc = updateDictProc_Pizza(dictProc)
-	dictProc = updateDictProc_Sea(dictProc)
-	dictProc = updateDictProc_QR(dictProc)
+    dictProc = createDictProc()
+    dictProc = updateDictProc_Tutorial(dictProc)
+    dictProc = updateDictProc_Final(dictProc)
 
-	dictFlag = getDictFlag()
+    dictFlag = getDictFlag()
 
-	return cState, dictProc, dictFlag
+    return cState, dictProc, dictFlag
 
 
 # メインスレッド =======================================================
 def mainThread():
-	blDebug = True
-	proc = setEnvironment()
-	cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
-	cCtrlCard = ClsCtrlCard(dictFlag)
+    blDebug = True
+    proc = setEnvironment()
+    cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
+    cCtrlCard = ClsCtrlCard(dictFlag)
 
-	listFlags = list(dictFlag.keys())
-	print(listFlags[0])
-	
+    listFlags = list(dictFlag.keys())
+    print(listFlags[0])
 
-	# 管理者カードの一覧を取得
-	with open("files/Admin_CardID_list.yaml", "r") as f:
-		card_ID_list = yaml.safe_load(f)["card_ID"]
+    # 管理者カードの一覧を取得
+    with open("files/Admin_CardID_list.yaml", "r") as f:
+        card_ID_list = yaml.safe_load(f)["card_ID"]
 
-	dictArgument = {
-		"State"			: cState,
-		"CtrlCard"		: cCtrlCard,
-		"ImageProc"		: proc,
-		"Event"			: None,
-		"Values"		: None,
-		"Frame"			: 0,
-		"Start time"	: 0,
-		"Return state"	: None,  # カードエラーからの復帰位置
-		"Option"		: 0,
-		"Complete"		: 0,
-	}
+    dictArgument = {
+        "State": cState,
+        "CtrlCard": cCtrlCard,
+        "ImageProc": proc,
+        "Event": None,
+        "Values": None,
+        "Frame": 0,
+        "Start time": 0,
+        "Return state": None,  # カードエラーからの復帰位置
+        "Option": 0,
+        "Complete": 0,
+    }
 
-	# 無限ループ ----------------------------------------
-	while True:
-		if dictArgument["Complete"] == 1:
-			break
+    # 無限ループ ----------------------------------------
+    while True:
+        if dictArgument["Complete"] == 1:
+            break
 
-		# フレームを記録
-		dictArgument["Frame"] = (dictArgument["Frame"] + 1) % 1000
+        # フレームを記録
+        dictArgument["Frame"] = (dictArgument["Frame"] + 1) % 1000
 
-		# 現在のステートを確認
-		currentState = cState.getState()
+        # 現在のステートを確認
+        currentState = cState.getState()
 
-		if cState.dictWindow[currentState] != "None":
-			# ウィンドウからイベントを受信
-			event, values = cState.readEvent()
-			dictArgument["Event"] = event
-			dictArgument["Values"] = values
-			
-			if event != "-timeout-":
-				print(event)
+        if cState.dictWindow[currentState] != "None":
+            # ウィンドウからイベントを受信
+            event, values = cState.readEvent()
+            dictArgument["Event"] = event
+            dictArgument["Values"] = values
 
-			if blDebug == False:
-				pyautogui.moveTo(1, 1)
+            if event != "-timeout-":
+                print(event)
 
-		if currentState != "CARD_ERROR" and currentState != "STANDBY":
-			# カードの状態をチェック
-			currentState = CheckCard(dictArgument)  # カードの存在と同一性をチェック
-			admin_mode_flag, Admin_CardID = AdminFlag_fromCard(
-				cCtrlCard, card_ID_list
-			)  # ゲーム終了用のカードかをチェック
+            if blDebug == False:
+                pyautogui.moveTo(1, 1)
 
-			if admin_mode_flag:
-				print("Enter to Admin Mode")
-				break
+        if currentState != "CARD_ERROR" and currentState != "STANDBY":
+            # カードの状態をチェック
+            currentState = CheckCard(dictArgument)  # カードの存在と同一性をチェック
+            admin_mode_flag, Admin_CardID = AdminFlag_fromCard(
+                cCtrlCard, card_ID_list
+            )  # ゲーム終了用のカードかをチェック
 
-		dictProc[currentState](dictArgument)
+            if admin_mode_flag:
+                print("Enter to Admin Mode")
+                break
 
-	cCtrlCard.Finalize()
-	proc.Finalize()
-	cState.Finalize()
+        dictProc[currentState](dictArgument)
 
-	return Admin_CardID
+    cCtrlCard.Finalize()
+    proc.Finalize()
+    cState.Finalize()
+
+    return Admin_CardID
 
 
 # メイン関数 =================================================
 if __name__ == "__main__":
-	while True:
-		Admin_CardID = mainThread()
-		#adminCommand = AdminMode(Admin_CardID)
+    while True:
+        Admin_CardID = mainThread()
+        #adminCommand = AdminMode(Admin_CardID)
 
-		if os.name == 'nt':
-			adminCommand = "end"
+        if os.name == 'nt':
+            adminCommand = "end"
 
-		if adminCommand == "end":
-			break
+        if adminCommand == "end":
+            break
