@@ -13,9 +13,9 @@ def createDictProc():
     dictProc = {
         "STANDBY": standbyModeProc,
         "GO_OTHER_GAME": goOtherGameProc,
-        "TUTORIAL1": tutorial1Proc,
-        "ENDING1": ending1Proc,
-        "Clear": clearProc,
+        "TUTORIAL": tutorialProc,
+        "ENDING": endingProc,
+        "CLEAR": clearProc,
         "CARD_ERROR": card_error_ModeProc,
     }
     return dictProc
@@ -23,22 +23,24 @@ def createDictProc():
 
 # レイアウト設定・辞書割り当て =============================================
 def createDictWindow():
-    layoutStandby = make_fullimage_layout("png/standby01.png", "STANDBY")
+    layoutBackGround = [[sg.Text()]]
+    layoutStandby = make_fullimage_layout("png/standby.png", "STANDBY")
     layoutGoOtherGame = make_fullimage_layout(
         "png/go_other_game.png", "GO_OTHER_GAME")
-    layoutTutorial1 = make_4choice_layout(
-        "png/tutorial1.png", "TUTORIAL1")
-    layoutEnding1 = make_fullimage_layout("png/ending1.png", "ENDING1")
+    layoutTutorial = make_4choice_layout(
+        "png/tutorial.png", "TUTORIAL")
+    layoutEnding = make_fullimage_layout("png/ending.png", "ENDING")
     layoutClear = make_fullimage_layout("png/clear.png", "CLEAR")
     layoutCard_Error = make_fullimage_layout(
         "png/card_alert.png", "CARD_ERROR")
 
     dictLayout = {
+        "BACKGROUND": layoutBackGround,
         "STANDBY": layoutStandby,
         "GO_OTHER_GAME": layoutGoOtherGame,
-        "TUTORIAL1": layoutTutorial1,
-        "ENDING1": layoutEnding1,
-        "Clear": layoutClear,
+        "TUTORIAL": layoutTutorial,
+        "ENDING": layoutEnding,
+        "CLEAR": layoutClear,
         "CARD_ERROR": layoutCard_Error,
     }
     dictWindow = setGUI(dictLayout)
@@ -46,8 +48,17 @@ def createDictWindow():
     return dictWindow
 
 
+# 標準タップ座標設定 ================================================
+def getDefaultAreaDefinition():
+    vArea0 = [260, 520, 520, 60]
+    listArea = [vArea0, ]
+
+    return listArea
+
+
 # standbyModeProc======================================================
 def standbyModeProc(dictArgument):
+    # event = dictArgument["Event"]
     cCtrlCard = dictArgument["CtrlCard"]
     cState = dictArgument["State"]
 
@@ -55,37 +66,44 @@ def standbyModeProc(dictArgument):
 
     if setFlag:
         PlaySound("sound/card_set.wav")
-        sStartTime = cState.updateState("TITLE")
+        sStartTime = cState.updateState("TUTORIAL")
         dictArgument["Start time"] = sStartTime
 
 
 # goOtherGameProc ======================================================
 def goOtherGameProc(dictArgument):
     event = dictArgument["Event"]
-    cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cState = dictArgument["State"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "GO_OTHER_GAME":
         pass
 
 
-# tutorial1Proc=================================================
-def tutorial1Proc(dictArgument):
+# tutorialProc=================================================
+def tutorialProc(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
-    if event == "TUTORIAL1":
-        pass
+    if event == "TUTORIAL":
+        vPosition = pyautogui.position()
+        listArea = getDefaultAreaDefinition()
+        sTappedArea = CheckTappedArea(vPosition, listArea)
+        print(sTappedArea)
+
+        if sTappedArea == 0:
+            sStartTime = cState.updateState("TUTORIAL_0")
+            dictArgument["Start time"] = sStartTime
 
 
 # ending1Proc =========================================================
-def ending1Proc(dictArgument):
+def endingProc(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
-    if event == "ENDING1":
+    if event == "ENDING":
         sStartTime = cState.updateState("CLEAR")
         dictArgument["Start time"] = sStartTime
 
@@ -94,7 +112,7 @@ def ending1Proc(dictArgument):
 def clearProc(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "CLEAR":
         pass

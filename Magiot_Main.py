@@ -54,7 +54,7 @@ def setEnvironment():
 def setModeFuncsAndLayouts(blDebug):
     dictWindow = createDictWindow()
     dictWindow = updateDictWindow_Tutorial(dictWindow)
-    dictWindow = updateDictWindow_Final(dictWindow)
+    # dictWindow = updateDictWindow_Final(dictWindow)
 
     if blDebug == False:
         for sKey in dictWindow:
@@ -66,7 +66,7 @@ def setModeFuncsAndLayouts(blDebug):
 
     dictProc = createDictProc()
     dictProc = updateDictProc_Tutorial(dictProc)
-    dictProc = updateDictProc_Final(dictProc)
+    # dictProc = updateDictProc_Final(dictProc)
 
     dictFlag = getDictFlag()
 

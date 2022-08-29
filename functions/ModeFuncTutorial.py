@@ -41,8 +41,27 @@ def updateDictWindow_Tutorial(dictWindow):
 
 # 標準タップ座標設定 ================================================
 def getDefaultAreaDefinition():
-    vArea0 = [0, 0, 0, 0]
-    listArea = [vArea0]
+    vArea0 = [260, 520, 520, 60]
+    listArea = [vArea0, ]
+
+    return listArea
+
+
+# 電話タップ座標設定 ================================================
+def getCallAreaDefinition():
+    vArea0 = [260, 520, 520, 60]
+    vArea1 = [0, 0, 0, 0]
+    vArea2 = [0, 0, 0, 0]
+    vArea3 = [0, 0, 0, 0]
+    vArea4 = [0, 0, 0, 0]
+    vArea5 = [0, 0, 0, 0]
+    vArea6 = [0, 0, 0, 0]
+    vArea7 = [0, 0, 0, 0]
+    vArea8 = [0, 0, 0, 0]
+    vArea9 = [0, 0, 0, 0]
+
+    listArea = [vArea0, vArea1, vArea2, vArea3,
+                vArea4, vArea5, vArea6, vArea7, vArea8, vArea9]
 
     return listArea
 
@@ -50,11 +69,11 @@ def getDefaultAreaDefinition():
 def procTutorial_0(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_0":
         vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
+        listArea = getDDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
@@ -66,7 +85,7 @@ def procTutorial_0(dictArgument):
 def procTutorial_1(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_1":
         vPosition = pyautogui.position()
@@ -84,7 +103,7 @@ def procTutorial_1(dictArgument):
 def procTutorial_2(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_2":
         vPosition = pyautogui.position()
@@ -100,7 +119,7 @@ def procTutorial_2(dictArgument):
 def procTutorial_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_3":
         vPosition = pyautogui.position()
@@ -118,7 +137,7 @@ def procTutorial_3(dictArgument):
 def procTutorial_4(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_4":
         vPosition = pyautogui.position()
@@ -135,8 +154,8 @@ def procTutorial_4(dictArgument):
 
 def procTutorial_5(dictArgument):
     event = dictArgument["Event"]
-    cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
+    # cState = dictArgument["State"]
+    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_5":
         pass

@@ -12,15 +12,12 @@ def SetGame_FromCard(dictArgument):
     if dictSaveData is not None and dictSaveData["complete"] == "T":
         print("game complete")
 
-    # アイスをクリアしている場合
     elif dictSaveData["ice"] == "T":
         cState.dictWindow["SELECT_GAME"]["アイス"].update(disabled=True)
 
-    # ピザをクリアしている場合
     elif dictSaveData["pizza"] == "T":
         cState.dictWindow["SELECT_GAME"]["ピザ"].update(disabled=True)
 
-    # ピザをクリアしている場合
     elif dictSaveData["sea"] == "T":
         cState.dictWindow["SELECT_GAME"]["海"].update(disabled=True)
 

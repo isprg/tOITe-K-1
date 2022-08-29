@@ -46,15 +46,15 @@ def updateDictWindow_Final(dictWindow):
 
 # 標準タップ座標設定 ================================================
 def getDefaultAreaDefinition():
-    vArea0 = [0, 0, 0, 0]
-    listArea = [vArea0]
+    vArea0 = [260, 520, 520, 60]
+    listArea = [vArea0, ]
 
     return listArea
 
 
 # 電話タップ座標設定 ================================================
 def getCallAreaDefinition():
-    vArea0 = [0, 0, 0, 0]
+    vArea0 = [260, 520, 520, 60]
     vArea1 = [0, 0, 0, 0]
     vArea2 = [0, 0, 0, 0]
     vArea3 = [0, 0, 0, 0]
@@ -111,24 +111,8 @@ def procFinal_1(dictArgument):
             else:
                 sStartTime = cState.updateState("FINAL_2_WRONG")
                 dictArgument["Start time"] = sStartTime
-        elif sTappedArea == 1:
-            phoneNumber.append(1)
-        elif sTappedArea == 2:
-            phoneNumber.append(2)
-        elif sTappedArea == 3:
-            phoneNumber.append(3)
-        elif sTappedArea == 4:
-            phoneNumber.append(4)
-        elif sTappedArea == 5:
-            phoneNumber.append(5)
-        elif sTappedArea == 6:
-            phoneNumber.append(6)
-        elif sTappedArea == 7:
-            phoneNumber.append(7)
-        elif sTappedArea == 8:
-            phoneNumber.append(8)
-        elif sTappedArea == 9:
-            phoneNumber.append(9)
+        else:
+            phoneNumber.append(sTappedArea)
 
 
 def procFinal_2_wrong(dictArgument):
