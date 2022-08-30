@@ -10,13 +10,13 @@ def SetGame_FromCard(dictArgument):
         sStartTime = cState.updateState("CLEAR")
         dictArgument["Start time"] = sStartTime
 
+    elif dictSaveData["voice"] != "T":
+        sStartTime = cState.updateState("FINAL_0")
+        dictArgument["Start time"] = sStartTime
+
     elif dictSaveData["tutorial"] != "T":
         sStartTime = cState.updateState("TUTORIAL_0")
         dictArgument["Start time"] = sStartTime
-
-    # TODO: Finalへの遷移
-    elif dictSaveData["voice"] != "T":
-        pass
 
     else:
         print("InitCard")

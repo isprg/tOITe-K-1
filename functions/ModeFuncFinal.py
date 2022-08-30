@@ -1,7 +1,7 @@
 import pyautogui
 from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea, CheckComplete
-from functions.DesignLayout import make_fullimage_layout
+from functions.DesignLayout import make_fullimage_layout, make_4choice_layout
 
 
 # 処理の辞書割り当て ======================================================
@@ -9,8 +9,9 @@ def updateDictProc_Final(dictProc):
     dictProc_this = {
         "FINAL_0": procFinal_0,
         "FINAL_1": procFinal_1,
-        "FINAL_2_WRONG": procFinal_2_wrong,
-        "FINAL_2_CORRECT": procFinal_2_correct,
+        "FINAL_1_WRONG": procFinal_1_wrong,
+        "FINAL_1_CORRECT": procFinal_1_correct,
+        "FINAL_2": procFinal_2,
         "FINAL_3": procFinal_3,
         "FINAL_4": procFinal_4,
         "FINAL_5": procFinal_5,
@@ -22,22 +23,18 @@ def updateDictProc_Final(dictProc):
 def updateDictWindow_Final(dictWindow):
     layout0 = make_fullimage_layout("png/final00.png", "FINAL_0")
     layout1 = make_fullimage_layout("png/final01.png", "FINAL_1")
-    layout2wrong = make_fullimage_layout(
-        "png/final02wrong.png", "FINAL_2_WRONG")
-    layout2correct = make_fullimage_layout(
-        "png/final02correct.png", "FINAL_2_CORRECT")
-    layout3 = make_fullimage_layout("png/final03.png", "FINAL_3")
-    layout4 = make_fullimage_layout("png/final04.png", "FINAL_4")
-    layout5 = make_fullimage_layout("png/final05.png", "FINAL_5")
+    layout1wrong = make_fullimage_layout(
+        "png/final01wrong.png", "FINAL_1_WRONG")
+    layout1correct = make_fullimage_layout(
+        "png/final01correct.png", "FINAL_1_CORRECT")
+    layout2 = make_fullimage_layout("png/final02.png", "FINAL_2")
 
     dictLayout = {
         "FINAL_0": layout0,
         "FINAL_1": layout1,
-        "FINAL_2_WRONG": layout2wrong,
-        "FINAL_2_CORRECT": layout2correct,
-        "FINAL_3": layout3,
-        "FINAL_4": layout4,
-        "FINAL_5": layout5,
+        "FINAL_1_WRONG": layout1wrong,
+        "FINAL_1_CORRECT": layout1correct,
+        "FINAL_2": layout2,
     }
     dictWindow_this = setGUI(dictLayout)
 
@@ -75,7 +72,6 @@ def getCallAreaDefinition():
 def procFinal_0(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "FINAL_0":
         vPosition = pyautogui.position()
@@ -92,7 +88,6 @@ def procFinal_0(dictArgument):
 def procFinal_1(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "FINAL_1":
         # TODO: 繰り返し処理
@@ -107,27 +102,38 @@ def procFinal_1(dictArgument):
 
             if sTappedArea == 0:  # 電話をかけるをタップ
                 if isCorrect:
-                    sStartTime = cState.updateState("FINAL_2_CORRECT")
+                    PlaySound("sound/call.wav")
+                    sStartTime = cState.updateState("FINAL_1_CORRECT")
                     dictArgument["Start time"] = sStartTime
                 elif len(phoneNumber) < 3:
                     pass
                 else:
-                    sStartTime = cState.updateState("FINAL_2_WRONG")
+                    PlaySound("sound/wrong.wav")
+                    sStartTime = cState.updateState("FINAL_1_WRONG")
                     dictArgument["Start time"] = sStartTime
             elif sTappedArea != -1:
                 phoneNumber.append(sTappedArea)
             else:
                 continue
 
+        # Test
+        # vPosition = pyautogui.position()
+        # listArea = getDefaultAreaDefinition()
+        # sTappedArea = CheckTappedArea(vPosition, listArea)
+        # print(sTappedArea)
+
+        # if sTappedArea == 0:
+        #     PlaySound("sound/call.wav")
+        #     sStartTime = cState.updateState("FINAL_1_CORRECT")
+        #     dictArgument["Start time"] = sStartTime
+
 
 # 電話番号不正解
-def procFinal_2_wrong(dictArgument):
+def procFinal_1_wrong(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
 
-    if event == "FINAL_2_WRONG":
-        PlaySound("sound/wrong.wav")
-
+    if event == "FINAL_1_WRONG":
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
@@ -139,13 +145,11 @@ def procFinal_2_wrong(dictArgument):
 
 
 # 電話番号正解
-def procFinal_2_correct(dictArgument):
+def procFinal_1_correct(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
-    if event == "FINAL_2_CORRECT":
-        PlaySound("sound/call.wav")
+    if event == "FINAL_1_CORRECT":
         PlaySound("sound/final1.wav")
 
         vPosition = pyautogui.position()
@@ -153,12 +157,30 @@ def procFinal_2_correct(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:
-            sStartTime = cState.updateState("FINAL_3")
+        if sTappedArea == 0:  # 答えるをタップ
+            sStartTime = cState.updateState("SR_Q")  # 音声認識へ
             dictArgument["Start time"] = sStartTime
 
 
-# 合言葉話す
+# Final 4,5
+def procFinal_2(dictArgument):
+    event = dictArgument["Event"]
+    cState = dictArgument["State"]
+    cCtrlCard = dictArgument["CtrlCard"]
+
+    if event == "FINAL_2":
+        vPosition = pyautogui.position()
+        listArea = getDefaultAreaDefinition()
+        sTappedArea = CheckTappedArea(vPosition, listArea)
+        print(sTappedArea)
+
+        if sTappedArea == 0:  # 次へをタップ
+            cCtrlCard.write_result("complete", "T")
+            sStartTime = cState.updateState("CLEAR")
+            dictArgument["Start time"] = sStartTime
+
+
+# Final クリア
 def procFinal_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
@@ -171,8 +193,7 @@ def procFinal_3(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == 0:
-            sStartTime = cState.updateState("FINAL_4")
-            dictArgument["Start time"] = sStartTime
+            pass
 
 
 def procFinal_4(dictArgument):
