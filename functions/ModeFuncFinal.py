@@ -71,6 +71,7 @@ def getCallAreaDefinition():
     return listArea
 
 
+# 最終問題タイトル
 def procFinal_0(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
@@ -82,11 +83,12 @@ def procFinal_0(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:
+        if sTappedArea == 0:  # 答えるをタップ
             sStartTime = cState.updateState("FINAL_1")
             dictArgument["Start time"] = sStartTime
 
 
+# 電話番号入力
 def procFinal_1(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
@@ -94,64 +96,69 @@ def procFinal_1(dictArgument):
 
     if event == "FINAL_1":
         # TODO: 繰り返し処理
-        vPosition = pyautogui.position()
-        listArea = getCallAreaDefinition()
-        sTappedArea = CheckTappedArea(vPosition, listArea)
-        print(sTappedArea)
-
-        isCorrect = false
+        isCorrect = False
         phoneNumber = []
 
-        if sTappedArea == 0:
-            if isCorrect:
-                sStartTime = cState.updateState("FINAL_2_CORRECT")
-                dictArgument["Start time"] = sStartTime
-            elif len(phoneNumber) < 3:
-                pass
+        for _ in range(3):
+            vPosition = pyautogui.position()
+            listArea = getCallAreaDefinition()
+            sTappedArea = CheckTappedArea(vPosition, listArea)
+            print(sTappedArea)
+
+            if sTappedArea == 0:  # 電話をかけるをタップ
+                if isCorrect:
+                    sStartTime = cState.updateState("FINAL_2_CORRECT")
+                    dictArgument["Start time"] = sStartTime
+                elif len(phoneNumber) < 3:
+                    pass
+                else:
+                    sStartTime = cState.updateState("FINAL_2_WRONG")
+                    dictArgument["Start time"] = sStartTime
+            elif sTappedArea != -1:
+                phoneNumber.append(sTappedArea)
             else:
-                sStartTime = cState.updateState("FINAL_2_WRONG")
-                dictArgument["Start time"] = sStartTime
-        else:
-            phoneNumber.append(sTappedArea)
+                continue
 
 
+# 電話番号不正解
 def procFinal_2_wrong(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "FINAL_2_WRONG":
+        PlaySound("sound/wrong.wav")
+
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
-
-        PlaySound("sound/wrong.wav")
 
         if sTappedArea == 0:
             sStartTime = cState.updateState("FINAL_0")
             dictArgument["Start time"] = sStartTime
 
 
+# 電話番号正解
 def procFinal_2_correct(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
     cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "FINAL_2_CORRECT":
+        PlaySound("sound/call.wav")
+        PlaySound("sound/final1.wav")
+
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
-
-        PlaySound("sound/call.wav")
-        PlaySound("sound/final1.wav")
 
         if sTappedArea == 0:
             sStartTime = cState.updateState("FINAL_3")
             dictArgument["Start time"] = sStartTime
 
 
+# 合言葉話す
 def procFinal_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]

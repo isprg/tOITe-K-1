@@ -1,5 +1,3 @@
-
-
 # ゲームの状態をカードに保存されているデータから設定
 def SetGame_FromCard(dictArgument):
     cCtrlCard = dictArgument["CtrlCard"]
@@ -8,24 +6,22 @@ def SetGame_FromCard(dictArgument):
     dictSaveData = cCtrlCard.read_result()
     print("Save Data:", dictSaveData)
 
-    # 全問正解の場合
     if dictSaveData is not None and dictSaveData["complete"] == "T":
-        print("game complete")
+        sStartTime = cState.updateState("CLEAR")
+        dictArgument["Start time"] = sStartTime
 
-    elif dictSaveData["ice"] == "T":
-        cState.dictWindow["SELECT_GAME"]["アイス"].update(disabled=True)
+    elif dictSaveData["tutorial"] != "T":
+        sStartTime = cState.updateState("TUTORIAL_0")
+        dictArgument["Start time"] = sStartTime
 
-    elif dictSaveData["pizza"] == "T":
-        cState.dictWindow["SELECT_GAME"]["ピザ"].update(disabled=True)
-
-    elif dictSaveData["sea"] == "T":
-        cState.dictWindow["SELECT_GAME"]["海"].update(disabled=True)
+    # TODO: Finalへの遷移
+    elif dictSaveData["voice"] != "T":
+        pass
 
     else:
-        # カードを初期化
         print("InitCard")
         cCtrlCard.initCard()
-        sStartTime = cState.updateState("SELECT_GAME")
+        sStartTime = cState.updateState("GO_OTHER_GAME")
         dictArgument["Start time"] = sStartTime
 
 

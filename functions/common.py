@@ -51,13 +51,16 @@ def CheckComplete(cCtrlCard):
             bClear = False
             break
 
-    return bClear
+    return bCleara
 
 
 def PlaySound(path):
     if os.name != 'nt':
         subprocess.Popen(["aplay", "--quiet", path])
-    print(f'play sound ({path})')
+    else:
+        subprocess.Popen(
+            ["powershell", "-c", f"(New-Object Media.SoundPlayer '{path}').PlaySync();"])
+    # print(f'played sound ({path})')
 
 
 def CheckTappedArea(vPosition, listArea):
