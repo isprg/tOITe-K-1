@@ -1,7 +1,7 @@
 import pyautogui
 from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea, CheckComplete
-from functions.DesignLayout import make_fullimage_layout, make_4choice_layout
+from functions.DesignLayout import make_fullimage_layout
 
 
 # 処理の辞書割り当て ======================================================
@@ -13,8 +13,7 @@ def updateDictProc_Final(dictProc):
         "FINAL_1_CORRECT": procFinal_1_correct,
         "FINAL_2": procFinal_2,
         "FINAL_3": procFinal_3,
-        "FINAL_4": procFinal_4,
-        "FINAL_5": procFinal_5,
+        "FINAL_3_WRONG": procFinal_3_wrong,
     }
     return dict(dictProc, **dictProc_this)
 
@@ -28,6 +27,10 @@ def updateDictWindow_Final(dictWindow):
     layout1correct = make_fullimage_layout(
         "png/final01correct.png", "FINAL_1_CORRECT")
     layout2 = make_fullimage_layout("png/final02.png", "FINAL_2")
+    layout3 = make_fullimage_layout(
+        "png/final03.png", "FINAL_3")
+    layout3wrong = make_fullimage_layout(
+        "png/final03wrong.png", "FINAL_3_WRONG")
 
     dictLayout = {
         "FINAL_0": layout0,
@@ -35,6 +38,8 @@ def updateDictWindow_Final(dictWindow):
         "FINAL_1_WRONG": layout1wrong,
         "FINAL_1_CORRECT": layout1correct,
         "FINAL_2": layout2,
+        "FINAL_3": layout3,
+        "FINAL_3_WRONG": layout3wrong,
     }
     dictWindow_this = setGUI(dictLayout)
 
@@ -49,18 +54,29 @@ def getDefaultAreaDefinition():
     return listArea
 
 
+# 4択タップ座標設定
+def get4ChoiceAreaDefinition():
+    vArea0 = [40, 310, 400, 100]
+    vArea1 = [500, 310, 400, 100]
+    vArea2 = [40, 460, 400, 100]
+    vArea3 = [500, 460, 400, 100]
+    listArea = [vArea0, vArea1, vArea2, vArea3]
+
+    return listArea
+
+
 # 電話タップ座標設定 ================================================
 def getCallAreaDefinition():
     vArea0 = [260, 520, 520, 60]
-    vArea1 = [0, 0, 0, 0]
-    vArea2 = [0, 0, 0, 0]
-    vArea3 = [0, 0, 0, 0]
-    vArea4 = [0, 0, 0, 0]
-    vArea5 = [0, 0, 0, 0]
-    vArea6 = [0, 0, 0, 0]
-    vArea7 = [0, 0, 0, 0]
-    vArea8 = [0, 0, 0, 0]
-    vArea9 = [0, 0, 0, 0]
+    vArea1 = [260, 80, 170, 130]
+    vArea2 = [430, 80, 170, 130]
+    vArea3 = [600, 80, 170, 130]
+    vArea4 = [260, 210, 170, 130]
+    vArea5 = [430, 210, 170, 130]
+    vArea6 = [600, 210, 170, 130]
+    vArea7 = [260, 340, 170, 130]
+    vArea8 = [430, 340, 170, 130]
+    vArea9 = [600, 340, 170, 130]
 
     listArea = [vArea0, vArea1, vArea2, vArea3,
                 vArea4, vArea5, vArea6, vArea7, vArea8, vArea9]
@@ -106,13 +122,14 @@ def procFinal_1(dictArgument):
                     sStartTime = cState.updateState("FINAL_1_CORRECT")
                     dictArgument["Start time"] = sStartTime
                 elif len(phoneNumber) < 3:
-                    pass
+                    continue
                 else:
                     PlaySound("sound/wrong.wav")
                     sStartTime = cState.updateState("FINAL_1_WRONG")
                     dictArgument["Start time"] = sStartTime
             elif sTappedArea != -1:
                 phoneNumber.append(sTappedArea)
+                print(phoneNumber)
             else:
                 continue
 
@@ -126,22 +143,6 @@ def procFinal_1(dictArgument):
         #     PlaySound("sound/call.wav")
         #     sStartTime = cState.updateState("FINAL_1_CORRECT")
         #     dictArgument["Start time"] = sStartTime
-
-
-# 電話番号不正解
-def procFinal_1_wrong(dictArgument):
-    event = dictArgument["Event"]
-    cState = dictArgument["State"]
-
-    if event == "FINAL_1_WRONG":
-        vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
-        sTappedArea = CheckTappedArea(vPosition, listArea)
-        print(sTappedArea)
-
-        if sTappedArea == 0:
-            sStartTime = cState.updateState("FINAL_0")
-            dictArgument["Start time"] = sStartTime
 
 
 # 電話番号正解
@@ -159,6 +160,22 @@ def procFinal_1_correct(dictArgument):
 
         if sTappedArea == 0:  # 答えるをタップ
             sStartTime = cState.updateState("SR_Q")  # 音声認識へ
+            dictArgument["Start time"] = sStartTime
+
+
+# 電話番号不正解
+def procFinal_1_wrong(dictArgument):
+    event = dictArgument["Event"]
+    cState = dictArgument["State"]
+
+    if event == "FINAL_1_WRONG":
+        vPosition = pyautogui.position()
+        listArea = getDefaultAreaDefinition()
+        sTappedArea = CheckTappedArea(vPosition, listArea)
+        print(sTappedArea)
+
+        if sTappedArea == 0:
+            sStartTime = cState.updateState("FINAL_0")
             dictArgument["Start time"] = sStartTime
 
 
@@ -180,42 +197,39 @@ def procFinal_2(dictArgument):
             dictArgument["Start time"] = sStartTime
 
 
-# Final クリア
+# 不正解時の4択
 def procFinal_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "FINAL_3":
         vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
+        listArea = get4ChoiceAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:
-            pass
+        if sTappedArea == 1:
+            PlaySound("sound/correct.wav")
+            PlaySound("sound/final23.wav")
+            sStartTime = cState.updateState("SR_CORRECT")
+            dictArgument["Start time"] = sStartTime
+        elif sTappedArea == 0 or sTappedArea == 2 or sTappedArea == 3:
+            PlaySound("sound/wrong.wav")
+            sStartTime = cState.updateState("FINAL_3_WRONG")
+            dictArgument["Start time"] = sStartTime
 
 
-def procFinal_4(dictArgument):
+# 4択不正解
+def procFinal_3_wrong(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
-    if event == "FINAL_4":
+    if event == "FINAL_3_WRONG":
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:
-            sStartTime = cState.updateState("FINAL_5")
+        if sTappedArea == 0:  # もう一度答えるをタップ
+            sStartTime = cState.updateState("FINAL_3")
             dictArgument["Start time"] = sStartTime
-
-
-def procFinal_5(dictArgument):
-    event = dictArgument["Event"]
-    cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
-
-    if event == "FINAL_5":
-        pass

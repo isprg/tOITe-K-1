@@ -1,3 +1,6 @@
+from functions.common import CheckEnding, isBlank
+
+
 # ゲームの状態をカードに保存されているデータから設定
 def SetGame_FromCard(dictArgument):
     cCtrlCard = dictArgument["CtrlCard"]
@@ -10,17 +13,17 @@ def SetGame_FromCard(dictArgument):
         sStartTime = cState.updateState("CLEAR")
         dictArgument["Start time"] = sStartTime
 
-    elif dictSaveData["voice"] != "T":
-        sStartTime = cState.updateState("FINAL_0")
-        dictArgument["Start time"] = sStartTime
-
     elif dictSaveData["tutorial"] != "T":
         sStartTime = cState.updateState("TUTORIAL_0")
         dictArgument["Start time"] = sStartTime
 
-    else:
+    elif CheckEnding(cCtrlCard):
+        sStartTime = cState.updateState("FINAL_0")
+        dictArgument["Start time"] = sStartTime
+    elif isBlank(cCtrlCard):
         print("InitCard")
         cCtrlCard.initCard()
+    else:
         sStartTime = cState.updateState("GO_OTHER_GAME")
         dictArgument["Start time"] = sStartTime
 

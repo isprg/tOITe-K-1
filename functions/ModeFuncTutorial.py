@@ -96,7 +96,6 @@ def procTutorial_2(dictArgument):
 def procTutorial_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    # cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_3":
         vPosition = pyautogui.position()
@@ -114,6 +113,7 @@ def procTutorial_3(dictArgument):
 def procTutorial_4(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_4":
         vPosition = pyautogui.position()
@@ -122,6 +122,7 @@ def procTutorial_4(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == 0:  # 次へをタップ
+            cCtrlCard.write_result("tutorial", "T")
             sStartTime = cState.updateState("TUTORIAL_5")
             dictArgument["Start time"] = sStartTime
 
@@ -129,8 +130,6 @@ def procTutorial_4(dictArgument):
 # カード除去指示
 def procTutorial_5(dictArgument):
     event = dictArgument["Event"]
-    cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "TUTORIAL_5":
-        cCtrlCard.write_result("tutorial", "T")
+        pass

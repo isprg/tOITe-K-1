@@ -1,7 +1,7 @@
 import pyautogui
 import speech_recognition as sr
 from functions.setGUI import setGUI
-from functions.common import PlaySound, CheckTappedArea, CheckComplete
+from functions.common import PlaySound, CheckTappedArea
 from functions.DesignLayout import make_fullimage_layout
 
 
@@ -42,7 +42,6 @@ def getDefaultAreaDefinition():
 def procSR_Q(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
     sr.Recognizer()
     keyword = "くらわんか"
 
@@ -58,7 +57,8 @@ def procSR_Q(dictArgument):
                     query = sr.recognize_google(audio, language='ja-JP')
                     if query == keyword:
                         PlaySound("sound/correct.wav")
-                        cCtrlCard.write_result("voice", "T")
+                        PlaySound("sound/final23.wav")
+
                         sStartTime = cState.updateState("SR_CORRECT")
                         dictArgument["Start time"] = sStartTime
                 except sr.UnknownValueError:
@@ -70,6 +70,7 @@ def procSR_Q(dictArgument):
 def procSR_Correct(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "SR_CORRECT":
         vPosition = pyautogui.position()
@@ -78,6 +79,8 @@ def procSR_Correct(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == 0:  # 次へをタップ
+            PlaySound("sound/final45.wav")
+            cCtrlCard.write_result("voice", "T")
             sStartTime = cState.updateState("FINAL_2")
             dictArgument["Start time"] = sStartTime
 
@@ -85,6 +88,7 @@ def procSR_Correct(dictArgument):
 def procSR_Wrong(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "SR_WRONG":
         vPosition = pyautogui.position()
@@ -93,5 +97,11 @@ def procSR_Wrong(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == 0:  # 答えるをタップ
-            sStartTime = cState.updateState("SR_Q")
-            dictArgument["Start time"] = sStartTime
+            dictSaveData = cCtrlCard.read_result()["voice"]
+            if int(dictSaveData) < 4:
+                cCtrlCard.write_result("voice", str(int(dictSaveData) + 1))
+                sStartTime = cState.updateState("SR_Q")
+                dictArgument["Start time"] = sStartTime
+            else:
+                sStartTime = cState.updateState("FINAL_3")
+                dictArgument["Start time"] = sStartTime

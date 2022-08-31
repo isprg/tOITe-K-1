@@ -51,7 +51,33 @@ def CheckComplete(cCtrlCard):
             bClear = False
             break
 
-    return bCleara
+    return bClear
+
+
+# ゲームをクリアしたかを判定
+def CheckEnding(cCtrlCard):
+    dictSaveData = cCtrlCard.read_result()
+
+    bClear = True
+    for key in ["tutorial", "match", "speaker", "pose", "minappa"]:
+        if dictSaveData[key] != "T":
+            bClear = False
+            break
+
+    return bClear
+
+
+# カードが初期状態かを確認
+def isBlank(cCtrlCard):
+    dictSaveData = cCtrlCard.read_result()
+
+    bClear = True
+    for key in ["tutorial", "match", "speaker", "pose", "minappa", "voice", "complete"]:
+        if dictSaveData[key] == "T":
+            bClear = False
+            break
+
+    return bClear
 
 
 def PlaySound(path):
