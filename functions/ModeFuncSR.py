@@ -42,7 +42,7 @@ def getDefaultAreaDefinition():
 def procSR_Q(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    sr.Recognizer()
+    r = sr.Recognizer()
     keyword = "くらわんか"
 
     if event == "SR_Q":
@@ -51,20 +51,24 @@ def procSR_Q(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
         if sTappedArea == 0:  # 音声認識開始ボタン
-            with sr.Microphone as source:
-                try:
-                    audio = sr.listen(source)
-                    query = sr.recognize_google(audio, language='ja-JP')
-                    if query == keyword:
-                        PlaySound("sound/correct.wav")
-                        PlaySound("sound/final23.wav")
+            with sr.Microphone() as source:
+                audio = r.listen(source)
+            try:
+                query = r.recognize_google(audio, language='ja-JP')
+                if query == keyword:
+                    PlaySound("sound/correct.wav")
+                    PlaySound("sound/final23.wav")
 
-                        sStartTime = cState.updateState("SR_CORRECT")
-                        dictArgument["Start time"] = sStartTime
-                except sr.UnknownValueError:
+                    sStartTime = cState.updateState("SR_CORRECT")
+                    dictArgument["Start time"] = sStartTime
+                else:
                     PlaySound("sound/wrong.wav")
                     sStartTime = cState.updateState("SR_WRONG")
                     dictArgument["Start time"] = sStartTime
+            except sr.UnknownValueError:
+                PlaySound("sound/wrong.wav")
+                sStartTime = cState.updateState("SR_WRONG")
+                dictArgument["Start time"] = sStartTime
 
 
 def procSR_Correct(dictArgument):

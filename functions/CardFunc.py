@@ -14,7 +14,7 @@ def SetGame_FromCard(dictArgument):
         dictArgument["Start time"] = sStartTime
 
     elif dictSaveData["tutorial"] != "T":
-        sStartTime = cState.updateState("TUTORIAL_0")
+        sStartTime = cState.updateState("FINAL_0")
         dictArgument["Start time"] = sStartTime
 
     elif CheckEnding(cCtrlCard):

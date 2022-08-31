@@ -107,31 +107,25 @@ def procFinal_1(dictArgument):
 
     if event == "FINAL_1":
         # TODO: 繰り返し処理
-        isCorrect = False
-        phoneNumber = []
+        isCorrect = True
 
-        for _ in range(3):
-            vPosition = pyautogui.position()
-            listArea = getCallAreaDefinition()
-            sTappedArea = CheckTappedArea(vPosition, listArea)
-            print(sTappedArea)
+        vPosition = pyautogui.position()
+        listArea = getCallAreaDefinition()
+        sTappedArea = CheckTappedArea(vPosition, listArea)
+        print(sTappedArea)
 
-            if sTappedArea == 0:  # 電話をかけるをタップ
-                if isCorrect:
-                    PlaySound("sound/call.wav")
-                    sStartTime = cState.updateState("FINAL_1_CORRECT")
-                    dictArgument["Start time"] = sStartTime
-                elif len(phoneNumber) < 3:
-                    continue
-                else:
-                    PlaySound("sound/wrong.wav")
-                    sStartTime = cState.updateState("FINAL_1_WRONG")
-                    dictArgument["Start time"] = sStartTime
-            elif sTappedArea != -1:
-                phoneNumber.append(sTappedArea)
-                print(phoneNumber)
+        if sTappedArea == 0:  # 電話をかけるをタップ
+            if isCorrect:
+                PlaySound("sound/call.wav")
+                PlaySound("sound/final1.wav")
+                sStartTime = cState.updateState("FINAL_1_CORRECT")
+                dictArgument["Start time"] = sStartTime
             else:
-                continue
+                PlaySound("sound/wrong.wav")
+                sStartTime = cState.updateState("FINAL_1_WRONG")
+                dictArgument["Start time"] = sStartTime
+        elif sTappedArea != -1:
+            pass
 
         # Test
         # vPosition = pyautogui.position()
@@ -151,8 +145,6 @@ def procFinal_1_correct(dictArgument):
     cState = dictArgument["State"]
 
     if event == "FINAL_1_CORRECT":
-        PlaySound("sound/final1.wav")
-
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
