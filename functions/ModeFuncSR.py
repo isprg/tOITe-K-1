@@ -1,8 +1,13 @@
+from logging import getLogger
+
 import pyautogui
 import speech_recognition as sr
+
 from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea
 from functions.DesignLayout import make_fullimage_layout
+
+logger = getLogger("tOITe-K-1").getChild("SR")
 
 
 # 処理の辞書割り当て ======================================================
@@ -69,6 +74,10 @@ def procSR_Q(dictArgument):
                 PlaySound("sound/wrong.wav")
                 sStartTime = cState.updateState("SR_WRONG")
                 dictArgument["Start time"] = sStartTime
+                logger.warning("Could not understand audio")
+            except sr.RequestError as e:
+                logger.error(
+                    "Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
 def procSR_Correct(dictArgument):

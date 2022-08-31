@@ -4,3 +4,4 @@ images/
 Pipfile
 Pipfile.lock
 run.bat
+files/log/

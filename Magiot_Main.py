@@ -1,5 +1,6 @@
 # ライブラリ等のインポート ==============================================
-from Classes.ClsImageProcessQR import ClsImageProcessQR
+import datetime
+from logging import getLogger, StreamHandler, FileHandler, Formatter, DEBUG
 import pyautogui
 import yaml
 import os
@@ -11,6 +12,7 @@ from functions.ModeFuncSR import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
+from Classes.ClsImageProcessQR import ClsImageProcessQR
 
 if os.name == 'nt':
     from Classes.ClsCtrlCardDummy import ClsCtrlCard
@@ -21,8 +23,23 @@ else:
 import sys
 sys.path.append("./Classes")
 
+# logging settings
+logger = getLogger("tOITe-K-1")
+logger.setLevel(DEBUG)
+sh = StreamHandler()
+sh.setLevel(DEBUG)
+sf = Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+sh.setFormatter(sf)
+logger.addHandler(sh)
+now = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+fh = FileHandler(f"files/log/session-{now}.log")
+fh.setLevel(DEBUG)
+fh.setFormatter(sf)
+logger.addHandler(fh)
+
 
 # 環境設定 =============================================================
+
 def setEnvironment():
     if os.name == 'nt':
         strPlatform = "WIN"

@@ -1,4 +1,6 @@
+from logging import getLogger
 import time
+
 import PySimpleGUI as sg
 import pyautogui
 
@@ -6,6 +8,8 @@ from functions.setGUI import setGUI
 from functions.common import Reset_Game, PlaySound, CheckTappedArea
 from functions.CardFunc import SetGame_FromCard
 from functions.DesignLayout import *
+
+logger = getLogger("tOITe-K-1").getChild("Base")
 
 
 # 処理の辞書割り当て ======================================================
@@ -58,6 +62,7 @@ def standbyModeProc(dictArgument):
     if setFlag:
         PlaySound("sound/card_set.wav")
         SetGame_FromCard(dictArgument)
+        logger.debug("NFC Card is set")
 
 
 # goOtherGameProc ======================================================

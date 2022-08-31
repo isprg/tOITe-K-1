@@ -1,7 +1,12 @@
+from logging import getLogger
+
 import pyautogui
+
 from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea, CheckComplete
 from functions.DesignLayout import make_fullimage_layout
+
+logger = getLogger("tOITe-K-1").getChild("Final")
 
 
 # 処理の辞書割り当て ======================================================

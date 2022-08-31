@@ -1,4 +1,8 @@
+from logging import getLogger
+
 from functions.common import CheckEnding, isBlank
+
+logger = getLogger("tOITe-K-1").getChild("CardFunc")
 
 
 # ゲームの状態をカードに保存されているデータから設定
