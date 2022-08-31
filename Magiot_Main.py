@@ -24,6 +24,7 @@ import sys
 sys.path.append("./Classes")
 
 # logging settings
+os.makedirs("files/log", exist_ok=True)
 logger = getLogger("tOITe-K-1")
 logger.setLevel(DEBUG)
 sh = StreamHandler()
