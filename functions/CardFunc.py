@@ -22,9 +22,9 @@ def SetGame_FromCard(dictArgument):
         dictArgument["Start time"] = sStartTime
 
     # For test
-    # elif dictSaveData["voice"] != "T":
-    #     sStartTime = cState.updateState("FINAL_0")
-    #     dictArgument["Start time"] = sStartTime
+    elif dictSaveData["voice"] != "T":
+        sStartTime = cState.updateState("FINAL_0")
+        dictArgument["Start time"] = sStartTime
 
     elif CheckEnding(cCtrlCard):
         sStartTime = cState.updateState("FINAL_0")
