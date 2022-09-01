@@ -34,7 +34,7 @@ def Record_ClearTime_to_CSV(dictArgument):
 # ゲームを初期化
 def Reset_Game(dictArgument):
     sStartTime = dictArgument["State"].updateState("STANDBY")
-    dictArgument["ImageProc"].reset()
+    # dictArgument["ImageProc"].reset()
     dictArgument["Event"] = None
     dictArgument["Values"] = None
     dictArgument["Frame"] = 0
@@ -97,7 +97,7 @@ def CheckTappedArea(vPosition, listArea):
         sMinY = listArea[sAreaNumber][1]
         sMaxY = listArea[sAreaNumber][1] + listArea[sAreaNumber][3]
 
-        if(vPosition.x > sMinX and vPosition.x < sMaxX
+        if (vPosition.x > sMinX and vPosition.x < sMaxX
            and vPosition.y > sMinY and vPosition.y < sMaxY):
             sTappedArea = sAreaNumber
             break
