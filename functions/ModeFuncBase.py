@@ -85,7 +85,7 @@ def clearProc(dictArgument):
 def card_error_ModeProc(dictArgument):
     cState = dictArgument["State"]
     cCtrlCard = dictArgument["CtrlCard"]
-    proc = dictArgument["ImageProc"]
+    # proc = dictArgument["ImageProc"]
 
     exist = cCtrlCard.check_exist()  # カードが存在するかをチェック
     identical = cCtrlCard.check_identity()  # カードが同一かをチェック
@@ -93,7 +93,8 @@ def card_error_ModeProc(dictArgument):
         ReturnState, ImageProc_Flag = dictArgument["Return state"]
 
         if ImageProc_Flag:
-            proc.createWindows()
+            # proc.createWindows()
+            pass
 
         sStartTime = cState.updateState(ReturnState)
         dictArgument["Return state"] = None
