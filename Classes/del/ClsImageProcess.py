@@ -1,5 +1,5 @@
-from Classes.ClsImageSensor import ClsImageSensor
-from Classes.ClsWindow import ClsWindow
+from Classes.del.ClsImageSensor import ClsImageSensor
+from Classes.del.ClsWindow import ClsWindow
 
 
 class ClsImageProcess:

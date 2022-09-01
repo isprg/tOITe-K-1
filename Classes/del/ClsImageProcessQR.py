@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from Classes.ClsImageProcess import ClsImageProcess
+from Classes.del.ClsImageProcess import ClsImageProcess
 
 
 class ClsImageProcessQR(ClsImageProcess):

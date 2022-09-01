@@ -12,7 +12,7 @@ from functions.ModeFuncSR import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
-from Classes.ClsImageProcessQR import ClsImageProcessQR
+# from Classes.del.ClsImageProcessQR import ClsImageProcessQR
 
 if os.name == 'nt':
     from Classes.ClsCtrlCardDummy import ClsCtrlCard
@@ -55,16 +55,17 @@ def setEnvironment():
     tplWindowName = ("full",)
     sFlipMode = 2
 
-    proc = ClsImageProcessQR(
-        strPlatform,
-        sCameraNumber,
-        sSensorWidth,
-        sSensorHeight,
-        sMonitorWidth,
-        sMonitorHeight,
-        tplWindowName,
-        sFlipMode,
-    )
+    # proc = ClsImageProcessQR(
+    #     strPlatform,
+    #     sCameraNumber,
+    #     sSensorWidth,
+    #     sSensorHeight,
+    #     sMonitorWidth,
+    #     sMonitorHeight,
+    #     tplWindowName,
+    #     sFlipMode,
+    # )
+    proc = None
 
     return proc
 
@@ -97,7 +98,6 @@ def setModeFuncsAndLayouts(blDebug):
 # メインスレッド =======================================================
 def mainThread():
     blDebug = True
-    proc = setEnvironment()
     cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
     cCtrlCard = ClsCtrlCard(dictFlag)
 
@@ -111,7 +111,6 @@ def mainThread():
     dictArgument = {
         "State": cState,
         "CtrlCard": cCtrlCard,
-        "ImageProc": proc,
         "Event": None,
         "Values": None,
         "Frame": 0,

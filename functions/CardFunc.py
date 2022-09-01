@@ -36,7 +36,7 @@ def SetGame_FromCard(dictArgument):
 def CheckCard(dictArgument):
     cState = dictArgument["State"]
     cCtrlCard = dictArgument["CtrlCard"]
-    proc = dictArgument["ImageProc"]
+    # proc = dictArgument["ImageProc"]
 
     # カードが存在するかをチェック
     result = cCtrlCard.check_exist()
@@ -44,7 +44,7 @@ def CheckCard(dictArgument):
         print("Card Error")
         if cState.dictWindow[cState.strState] == "None":
             dictArgument["Return state"] = (cState.strState, True)
-            proc.closeWindows()
+            # proc.closeWindows()
         else:
             dictArgument["Return state"] = (cState.strState, False)
 
