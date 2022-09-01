@@ -105,8 +105,8 @@ def procFinal_0(dictArgument):
             dictArgument["Start time"] = sStartTime
 
 
-PHONE_NUMBER = []
-PHONE_NUMBER_CORRECT = [1, 5, 9]
+PHONE_NUMBER = []  # 受け取った電話番号
+PHONE_NUMBER_CORRECT = [1, 5, 9]  # 正解の電話番号
 
 
 # 電話番号入力
@@ -123,26 +123,25 @@ def procFinal_1(dictArgument):
 
         if sTappedArea == 0 and len(PHONE_NUMBER) == 3:  # 電話をかけるをタップ
             print(PHONE_NUMBER)
-            isCorrect = True
-            for i, _ in enumerate(PHONE_NUMBER_CORRECT):
-                if PHONE_NUMBER[i] != PHONE_NUMBER_CORRECT[i]:
-                    isCorrect = False
-            if isCorrect:
+            if PHONE_NUMBER == PHONE_NUMBER_CORRECT:
+                PHONE_NUMBER = []
                 PlaySound("sound/call.wav")
                 PlaySound("sound/final1.wav")
                 sStartTime = cState.updateState("FINAL_1_CORRECT")
                 dictArgument["Start time"] = sStartTime
             else:
+                PHONE_NUMBER = []
                 PlaySound("sound/wrong.wav")
                 sStartTime = cState.updateState("FINAL_1_WRONG")
                 dictArgument["Start time"] = sStartTime
-            PHONE_NUMBER = []
         elif 1 <= sTappedArea <= 9 and len(PHONE_NUMBER) < 3:
             PHONE_NUMBER.append(sTappedArea)
             print(PHONE_NUMBER)
             PlaySound("sound/button1.wav")
-            sStartTime = cState.updateState("FINAL_1")
+            sStartTime = cState.updateState("FINAL_0")
             dictArgument["Start time"] = sStartTime
+        elif len(PHONE_NUMBER) > 3:
+            PHONE_NUMBER = []
 
 
 # 電話番号正解
