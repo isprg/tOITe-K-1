@@ -31,8 +31,9 @@ def SetGame_FromCard(dictArgument):
         dictArgument["Start time"] = sStartTime
 
     elif isBlank(cCtrlCard):
-        print("InitCard")
-        cCtrlCard.initCard()
+        # print("InitCard")
+        # cCtrlCard.initCard()
+        pass
 
     else:
         sStartTime = cState.updateState("GO_OTHER_GAME")
