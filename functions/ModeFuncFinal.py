@@ -105,21 +105,28 @@ def procFinal_0(dictArgument):
             dictArgument["Start time"] = sStartTime
 
 
+PHONE_NUMBER = []
+PHONE_NUMBER_CORRECT = [1, 5, 9]
+
+
 # 電話番号入力
 def procFinal_1(dictArgument):
+    global PHONE_NUMBER, PHONE_NUMBER_CORRECT
     event = dictArgument["Event"]
     cState = dictArgument["State"]
 
     if event == "FINAL_1":
-        # TODO: 繰り返し処理
-        isCorrect = True
-
         vPosition = pyautogui.position()
         listArea = getCallAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:  # 電話をかけるをタップ
+        if sTappedArea == 0 and len(PHONE_NUMBER) == 3:  # 電話をかけるをタップ
+            print(PHONE_NUMBER)
+            isCorrect = True
+            for i, _ in enumerate(PHONE_NUMBER_CORRECT):
+                if PHONE_NUMBER[i] != PHONE_NUMBER_CORRECT[i]:
+                    isCorrect = False
             if isCorrect:
                 PlaySound("sound/call.wav")
                 PlaySound("sound/final1.wav")
@@ -129,19 +136,13 @@ def procFinal_1(dictArgument):
                 PlaySound("sound/wrong.wav")
                 sStartTime = cState.updateState("FINAL_1_WRONG")
                 dictArgument["Start time"] = sStartTime
-        elif sTappedArea != -1:
-            pass
-
-        # Test
-        # vPosition = pyautogui.position()
-        # listArea = getDefaultAreaDefinition()
-        # sTappedArea = CheckTappedArea(vPosition, listArea)
-        # print(sTappedArea)
-
-        # if sTappedArea == 0:
-        #     PlaySound("sound/call.wav")
-        #     sStartTime = cState.updateState("FINAL_1_CORRECT")
-        #     dictArgument["Start time"] = sStartTime
+            PHONE_NUMBER = []
+        elif 1 <= sTappedArea <= 9 and len(PHONE_NUMBER) < 3:
+            PHONE_NUMBER.append(sTappedArea)
+            print(PHONE_NUMBER)
+            PlaySound("sound/button1.wav")
+            sStartTime = cState.updateState("FINAL_1")
+            dictArgument["Start time"] = sStartTime
 
 
 # 電話番号正解
