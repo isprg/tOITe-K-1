@@ -157,7 +157,7 @@ def mainThread():
         dictProc[currentState](dictArgument)
 
     cCtrlCard.Finalize()
-    proc.Finalize()
+    # proc.Finalize()
     cState.Finalize()
 
     return Admin_CardID
