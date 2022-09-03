@@ -82,11 +82,13 @@ def isBlank(cCtrlCard):
 
 def PlaySound(path):
     if os.name != 'nt':
-        subprocess.Popen(["aplay", "--quiet", path])
+        if isinstance(path, str):
+            subprocess.Popen(["aplay", "--quiet", path])
+        elif isinstance(path, list):
+            subprocess.Popen(["sh", "sound/play.sh", " ".join(path)])
     else:
         subprocess.Popen(
             ["powershell", "-c", f"(New-Object Media.SoundPlayer '{path}').PlaySync();"])
-    # print(f'played sound ({path})')
 
 
 def CheckTappedArea(vPosition, listArea):
