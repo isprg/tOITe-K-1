@@ -136,8 +136,7 @@ def procFinal_1(dictArgument):
         elif sTappedArea == 0:
             dictArgument["Option"][0] = 0
             if dictArgument["Option"][1:5] == listCorrectNumber:
-                PlaySound("sound/call.wav")
-                PlaySound("sound/final1.wav")
+                PlaySound(["sound/call.wav", "sound/final1.wav"])
                 sStartTime = cState.updateState("SR_Q")
                 dictArgument["Start time"] = sStartTime
             else:
