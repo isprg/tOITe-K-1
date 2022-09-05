@@ -105,15 +105,14 @@ def procFinal_0(dictArgument):
             dictArgument["Start time"] = sStartTime
 
 
-PHONE_NUMBER = []  # 受け取った電話番号
-PHONE_NUMBER_CORRECT = [1, 5, 9]  # 正解の電話番号
-
-
 # 電話番号入力
 def procFinal_1(dictArgument):
-    global PHONE_NUMBER, PHONE_NUMBER_CORRECT
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    listCorrectNumber = [1, 9, 2, 8]
+
+    if dictArgument["Option"] == 0 or dictArgument["Option"][0] == 0:
+        dictArgument["Option"] = [0, 0, 0, 0, 0]
 
     if event == "FINAL_1":
         vPosition = pyautogui.position()
@@ -121,27 +120,29 @@ def procFinal_1(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0 and len(PHONE_NUMBER) == 3:  # 電話をかけるをタップ
-            print(PHONE_NUMBER)
-            if PHONE_NUMBER == PHONE_NUMBER_CORRECT:
-                PHONE_NUMBER = []
+        if sTappedArea >= 1:
+            PlaySound("sound/button1.wav")
+            if dictArgument["Option"][0] < 4:
+                dictArgument["Option"][dictArgument["Option"]
+                                       [0] + 1] = sTappedArea
+                dictArgument["Option"][0] += 1
+            else:
+                PlaySound("sound/wrong.wav")
+                sStartTime = cState.updateState("FINAL_1_WRONG")
+                dictArgument["Start time"] = sStartTime
+            print(dictArgument["Option"])
+
+        elif sTappedArea == 0:
+            dictArgument["Option"][0] = 0
+            if dictArgument["Option"][1:5] == listCorrectNumber:
                 PlaySound("sound/call.wav")
                 PlaySound("sound/final1.wav")
                 sStartTime = cState.updateState("SR_Q")
                 dictArgument["Start time"] = sStartTime
             else:
-                PHONE_NUMBER = []
                 PlaySound("sound/wrong.wav")
                 sStartTime = cState.updateState("FINAL_1_WRONG")
                 dictArgument["Start time"] = sStartTime
-        elif 1 <= sTappedArea <= 9 and len(PHONE_NUMBER) < 3:
-            PHONE_NUMBER.append(sTappedArea)
-            print(PHONE_NUMBER)
-            PlaySound("sound/button1.wav")
-            sStartTime = cState.updateState("FINAL_0")
-            dictArgument["Start time"] = sStartTime
-        elif len(PHONE_NUMBER) > 3:
-            PHONE_NUMBER = []
 
 
 # 電話番号正解 (未使用)
