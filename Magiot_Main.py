@@ -12,7 +12,7 @@ from functions.ModeFuncSR import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
-from Classes.ClsAudioSensor1 import ClsAudioSensor
+from Classes.ClsAudioSensor import ClsAudioSensor
 
 if os.name == 'nt':
     from Classes.ClsCtrlCardDummy import ClsCtrlCard
