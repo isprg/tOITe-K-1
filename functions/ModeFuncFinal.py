@@ -29,8 +29,8 @@ def updateDictWindow_Final(dictWindow):
     layout1 = make_fullimage_layout("png/final01.png", "FINAL_1")
     layout1wrong = make_fullimage_layout(
         "png/final01wrong.png", "FINAL_1_WRONG")
-    layout1correct = make_fullimage_layout(
-        "png/final01correct.png", "FINAL_1_CORRECT")
+    # layout1correct = make_fullimage_layout(
+    #     "png/final01correct.png", "FINAL_1_CORRECT")
     layout2 = make_fullimage_layout("png/final02.png", "FINAL_2")
     layout3 = make_fullimage_layout(
         "png/final03.png", "FINAL_3")
@@ -41,7 +41,7 @@ def updateDictWindow_Final(dictWindow):
         "FINAL_0": layout0,
         "FINAL_1": layout1,
         "FINAL_1_WRONG": layout1wrong,
-        "FINAL_1_CORRECT": layout1correct,
+        # "FINAL_1_CORRECT": layout1correct,
         "FINAL_2": layout2,
         "FINAL_3": layout3,
         "FINAL_3_WRONG": layout3wrong,
@@ -127,7 +127,7 @@ def procFinal_1(dictArgument):
                 PHONE_NUMBER = []
                 PlaySound("sound/call.wav")
                 PlaySound("sound/final1.wav")
-                sStartTime = cState.updateState("FINAL_1_CORRECT")
+                sStartTime = cState.updateState("SR_Q")
                 dictArgument["Start time"] = sStartTime
             else:
                 PHONE_NUMBER = []
@@ -144,7 +144,7 @@ def procFinal_1(dictArgument):
             PHONE_NUMBER = []
 
 
-# 電話番号正解
+# 電話番号正解 (未使用)
 def procFinal_1_correct(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]

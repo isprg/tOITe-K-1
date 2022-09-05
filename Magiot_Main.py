@@ -12,7 +12,7 @@ from functions.ModeFuncSR import *
 from functions.CardFunc import *
 from functions.common import getDictFlag
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
-# from Classes.del.ClsImageProcessQR import ClsImageProcessQR
+from Classes.ClsAudioSensor import ClsAudioSensor
 
 if os.name == 'nt':
     from Classes.ClsCtrlCardDummy import ClsCtrlCard
@@ -47,27 +47,12 @@ def setEnvironment():
     else:
         strPlatform = "JETSON"
 
-    sCameraNumber = 0
-    sSensorWidth = 640
-    sSensorHeight = 360
-    sMonitorWidth = 1024
-    sMonitorHeight = 600
-    tplWindowName = ("full",)
-    sFlipMode = 2
+    sChannels = 1
+    sRate = 22050
+    sUnitSample = 1024
+    cAudio = ClsAudioSensor(sChannels, sRate, sUnitSample)
 
-    # proc = ClsImageProcessQR(
-    #     strPlatform,
-    #     sCameraNumber,
-    #     sSensorWidth,
-    #     sSensorHeight,
-    #     sMonitorWidth,
-    #     sMonitorHeight,
-    #     tplWindowName,
-    #     sFlipMode,
-    # )
-    proc = None
-
-    return proc
+    return cAudio
 
 
 # モード別設定 =============================================================
@@ -98,6 +83,7 @@ def setModeFuncsAndLayouts(blDebug):
 # メインスレッド =======================================================
 def mainThread():
     blDebug = True
+    cAudio = setEnvironment()
     cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
     cCtrlCard = ClsCtrlCard(dictFlag)
 
@@ -111,12 +97,14 @@ def mainThread():
     dictArgument = {
         "State": cState,
         "CtrlCard": cCtrlCard,
+        "ImageProc": None,
+        "AudioSensor": cAudio,
         "Event": None,
         "Values": None,
         "Frame": 0,
         "Start time": 0,
-        "Return state": None,  # カードエラーからの復帰位置
-        "Option": 0,
+        "Return state": None,
+        "Option": [0, 0, 0, 0, 0],
         "Complete": 0,
     }
 
@@ -157,7 +145,7 @@ def mainThread():
         dictProc[currentState](dictArgument)
 
     cCtrlCard.Finalize()
-    # proc.Finalize()
+    cAudio.finalize()
     cState.Finalize()
 
     return Admin_CardID

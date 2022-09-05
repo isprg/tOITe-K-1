@@ -1,16 +1,10 @@
-from logging import getLogger
-
 import pyautogui
 import speech_recognition as sr
-
 from functions.setGUI import setGUI
-from functions.common import PlaySound, CheckTappedArea
+from functions.common import PlaySound, CheckTappedArea, CheckComplete
 from functions.DesignLayout import make_fullimage_layout
 
-logger = getLogger("tOITe-K-1").getChild("SR")
 
-
-# 処理の辞書割り当て ======================================================
 def updateDictProc_SR(dictProc):
     dictProc_this = {
         "SR_Q": procSR_Q,
@@ -20,7 +14,6 @@ def updateDictProc_SR(dictProc):
     return dict(dictProc, **dictProc_this)
 
 
-# レイアウト設定・辞書割り当て =============================================
 def updateDictWindow_SR(dictWindow):
     layoutSR_Q = make_fullimage_layout("png/sr01.png", "SR_Q")
     layoutSR_Correct = make_fullimage_layout(
@@ -37,47 +30,52 @@ def updateDictWindow_SR(dictWindow):
     return dict(dictWindow, **dictWindow_this)
 
 
-def getDefaultAreaDefinition():
-    vArea0 = [260, 520, 520, 60]
-    listArea = [vArea0, ]
+def getAreaDefinition():
+    vArea0 = [260, 520, 260, 60]
+    vArea1 = [520, 520, 260, 60]
+    listArea = [vArea0, vArea1, ]
 
     return listArea
+
+
+def judgeAudio(strKeyword, strAudioFileName):
+    recog = sr.Recognizer()
+    with sr.AudioFile(strAudioFileName) as inputAudio:
+        audio = recog.record(inputAudio)
+    inputText = recog.recognize_google(audio, language='ja-JP')
+    print(inputText)
+
+    if strKeyword in inputText:
+        return True
+    else:
+        return False
 
 
 def procSR_Q(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    r = sr.Recognizer()
-    keyword = "くらわんか"
+    cCtrlCard = dictArgument["CtrlCard"]
+    cAudio = dictArgument["AudioSensor"]
 
     if event == "SR_Q":
         vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
+        listArea = getAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
-        if sTappedArea == 0:  # 音声認識開始ボタン
-            with sr.Microphone() as source:
-                audio = r.listen(source)
-            try:
-                query = r.recognize_google(audio, language='ja-JP')
-                if query == keyword:
-                    PlaySound("sound/correct.wav")
-                    PlaySound("sound/final23.wav")
+        if sTappedArea == 0 and cAudio.getRecording() == False:
+            print("start recording")
+            cAudio.startRecordThread()
+        elif sTappedArea == 1 and cAudio.getRecording() == True:
+            print("stop recording")
+            cAudio.setRecording(False)
+            cAudio.record("test.wav")
 
-                    sStartTime = cState.updateState("SR_CORRECT")
-                    dictArgument["Start time"] = sStartTime
-                else:
-                    PlaySound("sound/wrong.wav")
-                    sStartTime = cState.updateState("SR_WRONG")
-                    dictArgument["Start time"] = sStartTime
-            except sr.UnknownValueError:
-                PlaySound("sound/wrong.wav")
+            if judgeAudio("くらわんか", "test.wav"):
+                sStartTime = cState.updateState("SR_CORRECT")
+                dictArgument["Start time"] = sStartTime
+            else:
                 sStartTime = cState.updateState("SR_WRONG")
                 dictArgument["Start time"] = sStartTime
-                logger.warning("Could not understand audio")
-            except sr.RequestError as e:
-                logger.error(
-                    "Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
 def procSR_Correct(dictArgument):
@@ -87,13 +85,10 @@ def procSR_Correct(dictArgument):
 
     if event == "SR_CORRECT":
         vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
+        listArea = getAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
-        print(sTappedArea)
 
-        if sTappedArea == 0:  # 次へをタップ
-            PlaySound("sound/final45.wav")
-            cCtrlCard.write_result("voice", "T")
+        if sTappedArea == 0:
             sStartTime = cState.updateState("FINAL_2")
             dictArgument["Start time"] = sStartTime
 
@@ -101,20 +96,7 @@ def procSR_Correct(dictArgument):
 def procSR_Wrong(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "SR_WRONG":
-        vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
-        sTappedArea = CheckTappedArea(vPosition, listArea)
-        print(sTappedArea)
-
-        if sTappedArea == 0:  # 答えるをタップ
-            dictSaveData = cCtrlCard.read_result()["voice"]
-            if int(dictSaveData) < 4:
-                cCtrlCard.write_result("voice", str(int(dictSaveData) + 1))
-                sStartTime = cState.updateState("SR_Q")
-                dictArgument["Start time"] = sStartTime
-            else:
-                sStartTime = cState.updateState("FINAL_3")
-                dictArgument["Start time"] = sStartTime
+        sStartTime = cState.updateState("SR_Q")
+        dictArgument["Start time"] = sStartTime

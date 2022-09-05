@@ -44,6 +44,13 @@ def updateDictWindow_Tutorial(dictWindow):
     return dict(dictWindow, **dictWindow_this)
 
 
+def getFullAreaDefinition():
+    vArea0 = [0, 0, 0, 0]
+    listArea = [vArea0, ]
+
+    return listArea
+
+
 # 標準タップ座標設定 ================================================
 def getDefaultAreaDefinition():
     vArea0 = [260, 520, 520, 60]
@@ -59,11 +66,11 @@ def procTutorial_0(dictArgument):
 
     if event == "TUTORIAL_0":
         vPosition = pyautogui.position()
-        listArea = getDefaultAreaDefinition()
+        listArea = getFullAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:  # 次へをタップ
+        if sTappedArea == -1:  # 次へをタップ
             PlaySound("sound/call.wav")
             sStartTime = cState.updateState("TUTORIAL_2")
             dictArgument["Start time"] = sStartTime
