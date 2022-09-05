@@ -75,9 +75,11 @@ def procSR_Q(dictArgument):
 
         if sTappedArea == 0 and cAudio.getRecording() == False:
             print("start recording")
+            PlaySound("sound/button1.wav")
             cAudio.startRecordThread()
         elif sTappedArea == 1 and cAudio.getRecording() == True:
             print("stop recording")
+            PlaySound("sound/button1.wav")
             cAudio.setRecording(False)
             cAudio.record("test.wav")
 

@@ -5,3 +5,4 @@ Pipfile
 Pipfile.lock
 run.bat
 files/log/
+test.wav
