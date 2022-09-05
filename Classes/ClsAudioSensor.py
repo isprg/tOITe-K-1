@@ -1,6 +1,8 @@
 import pyaudio
 import wave
+import os
 from concurrent.futures import ThreadPoolExecutor
+from alsa_error_handler import noalsaerr
 
 
 class ClsAudioSensor:
@@ -11,13 +13,18 @@ class ClsAudioSensor:
         self.sChannels = sChannels
         self.sRate = sRate
         self.sUnitSample = sUnitSample
-        self.audio = pyaudio.PyAudio()
+
+        if os.name == 'nt':
+            self.audio = pyaudio.PyAudio()
+        else:
+            with noalsaerr():
+                self.audio = pyaudio.PyAudio()
+
         self.stream = self.audio.open(
             format=pyaudio.paInt16,
             channels=sChannels,
             rate=sRate,
             input=True,
-            # input_device_index=10,
             frames_per_buffer=sUnitSample)
 
     def __del__(self):
