@@ -82,7 +82,7 @@ def setModeFuncsAndLayouts(blDebug):
 
 # メインスレッド =======================================================
 def mainThread():
-    blDebug = True
+    blDebug = False
     cAudio = setEnvironment()
     cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
     cCtrlCard = ClsCtrlCard(dictFlag)
@@ -153,12 +153,15 @@ def mainThread():
 
 # メイン関数 =================================================
 if __name__ == "__main__":
-    while True:
-        Admin_CardID = mainThread()
-        adminCommand = AdminMode(Admin_CardID)
+    try:
+        while True:
+            Admin_CardID = mainThread()
+            adminCommand = AdminMode(Admin_CardID)
 
-        if os.name == 'nt':
-            adminCommand = "end"
+            if os.name == 'nt':
+                adminCommand = "end"
 
-        if adminCommand == "end":
-            break
+            if adminCommand == "end":
+                break
+    except KeyboardInterrupt:
+        pass
