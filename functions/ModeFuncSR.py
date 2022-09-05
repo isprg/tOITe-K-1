@@ -71,6 +71,8 @@ def procSR_Q(dictArgument):
             cAudio.record("test.wav")
 
             if judgeAudio("くらわんか", "test.wav"):
+                PlaySound("sound/correct.wav")
+                PlaySound("sound/final234.wav")
                 sStartTime = cState.updateState("SR_CORRECT")
                 dictArgument["Start time"] = sStartTime
             else:
@@ -89,6 +91,7 @@ def procSR_Correct(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
         if sTappedArea == 0:
+            cCtrlCard.write_result("voice", "T")
             sStartTime = cState.updateState("FINAL_2")
             dictArgument["Start time"] = sStartTime
 
@@ -96,7 +99,19 @@ def procSR_Correct(dictArgument):
 def procSR_Wrong(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cCtrlCard = dictArgument["CtrlCard"]
 
     if event == "SR_WRONG":
-        sStartTime = cState.updateState("SR_Q")
-        dictArgument["Start time"] = sStartTime
+        vPosition = pyautogui.position()
+        listArea = getDefaultAreaDefinition()
+        sTappedArea = CheckTappedArea(vPosition, listArea)
+
+        if sTappedArea == 0:
+            dictSaveData = cCtrlCard.read_result()["voice"]
+            if int(dictSaveData) < 4:
+                cCtrlCard.write_result("voice", str(int(dictSaveData) + 1))
+                sStartTime = cState.updateState("SR_Q")
+                dictArgument["Start time"] = sStartTime
+            else:
+                sStartTime = cState.updateState("FINAL_3")
+                dictArgument["Start time"] = sStartTime

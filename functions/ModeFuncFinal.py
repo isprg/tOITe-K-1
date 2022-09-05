@@ -209,7 +209,7 @@ def procFinal_3(dictArgument):
 
         if sTappedArea == 1:
             PlaySound("sound/correct.wav")
-            PlaySound("sound/final23.wav")
+            PlaySound("sound/final234.wav")
             sStartTime = cState.updateState("SR_CORRECT")
             dictArgument["Start time"] = sStartTime
         elif sTappedArea == 0 or sTappedArea == 2 or sTappedArea == 3:
