@@ -79,13 +79,11 @@ def procSR_Q(dictArgument):
             cAudio.startRecordThread()
         elif sTappedArea == 1 and cAudio.getRecording() == True:
             print("stop recording")
-            PlaySound("sound/button1.wav")
             cAudio.setRecording(False)
             cAudio.record("test.wav")
 
             if judgeAudio("くらわんか", "test.wav"):
-                PlaySound("sound/correct.wav")
-                PlaySound("sound/final234.wav")
+                PlaySound(["sound/correct.wav", "sound/final234.wav"])
                 sStartTime = cState.updateState("SR_CORRECT")
                 dictArgument["Start time"] = sStartTime
             else:

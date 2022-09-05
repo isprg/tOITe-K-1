@@ -86,9 +86,6 @@ def PlaySound(path):
             subprocess.Popen(["aplay", "--quiet", path])
         elif isinstance(path, list):
             subprocess.Popen(["sh", "sound/play.sh", " ".join(path)])
-    else:
-        subprocess.Popen(
-            ["powershell", "-c", f"(New-Object Media.SoundPlayer '{path}').PlaySync();"])
 
 
 def CheckTappedArea(vPosition, listArea):
