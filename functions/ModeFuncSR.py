@@ -1,7 +1,7 @@
 import pyautogui
 import speech_recognition as sr
 from functions.setGUI import setGUI
-from functions.common import PlaySound, CheckTappedArea, CheckComplete
+from functions.common import PlaySound, CheckTappedArea
 from functions.DesignLayout import make_fullimage_layout
 
 
@@ -38,12 +38,24 @@ def getAreaDefinition():
     return listArea
 
 
+def getDefaultAreaDefinition():
+    vArea0 = [260, 520, 520, 60]
+    listArea = [vArea0, ]
+
+    return listArea
+
+
 def judgeAudio(strKeyword, strAudioFileName):
     recog = sr.Recognizer()
-    with sr.AudioFile(strAudioFileName) as inputAudio:
-        audio = recog.record(inputAudio)
-    inputText = recog.recognize_google(audio, language='ja-JP')
-    print(inputText)
+    try:
+        with sr.AudioFile(strAudioFileName) as inputAudio:
+            audio = recog.record(inputAudio)
+        inputText = recog.recognize_google(audio, language='ja-JP')
+        print(inputText)
+    except sr.UnknownValueError:
+        return False
+    except sr.RequestError:
+        return False
 
     if strKeyword in inputText:
         return True
@@ -54,7 +66,6 @@ def judgeAudio(strKeyword, strAudioFileName):
 def procSR_Q(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
-    cCtrlCard = dictArgument["CtrlCard"]
     cAudio = dictArgument["AudioSensor"]
 
     if event == "SR_Q":
@@ -87,7 +98,7 @@ def procSR_Correct(dictArgument):
 
     if event == "SR_CORRECT":
         vPosition = pyautogui.position()
-        listArea = getAreaDefinition()
+        listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
         if sTappedArea == 0:
