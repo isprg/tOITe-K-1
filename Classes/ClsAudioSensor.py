@@ -17,7 +17,7 @@ class ClsAudioSensor:
             channels=sChannels,
             rate=sRate,
             input=True,
-            input_device_index=10,
+            # input_device_index=10,
             frames_per_buffer=sUnitSample)
 
     def __del__(self):
