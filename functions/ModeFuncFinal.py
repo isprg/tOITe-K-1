@@ -128,6 +128,7 @@ def procFinal_1(dictArgument):
                 dictArgument["Option"][0] += 1
             else:
                 PlaySound("sound/wrong.wav")
+                dictArgument["Option"][0] = 0
                 sStartTime = cState.updateState("FINAL_1_WRONG")
                 dictArgument["Start time"] = sStartTime
             print(dictArgument["Option"])
