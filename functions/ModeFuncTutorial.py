@@ -13,7 +13,7 @@ logger = getLogger("tOITe-K-1").getChild("Tutorial")
 def updateDictProc_Tutorial(dictProc):
     dictProc_this = {
         "TUTORIAL_0": procTutorial_0,
-        "TUTORIAL_1": procTutorial_1,
+        #"TUTORIAL_1": procTutorial_1,
         "TUTORIAL_2": procTutorial_2,
         "TUTORIAL_3": procTutorial_3,
         "TUTORIAL_4": procTutorial_4,
@@ -63,6 +63,7 @@ def getDefaultAreaDefinition():
 def procTutorial_0(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cPlayer = dictArgument["Player"]
 
     if event == "TUTORIAL_0":
         vPosition = pyautogui.position()
@@ -71,26 +72,27 @@ def procTutorial_0(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == -1:  # 次へをタップ
-            PlaySound("sound/call.wav")
+            cPlayer.playSoundEndCheck("sound/call.wav")
             sStartTime = cState.updateState("TUTORIAL_2")
             dictArgument["Start time"] = sStartTime
 
 
 # コール音用 (未使用)
-def procTutorial_1(dictArgument):
-    event = dictArgument["Event"]
-    cState = dictArgument["State"]
+# def procTutorial_1(dictArgument):
+#     event = dictArgument["Event"]
+#     cState = dictArgument["State"]
 
-    if event == "TUTORIAL_1":
-        PlaySound("sound/call.wav")
-        sStartTime = cState.updateState("TUTORIAL_2")
-        dictArgument["Start time"] = sStartTime
+#     if event == "TUTORIAL_1":
+#         dictArgument["Subproc"] = PlaySound("sound/call.wav")
+#         sStartTime = cState.updateState("TUTORIAL_2")
+#         dictArgument["Start time"] = sStartTime
 
 
 # 電話に出る
 def procTutorial_2(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cPlayer = dictArgument["Player"]
 
     if event == "TUTORIAL_2":
         vPosition = pyautogui.position()
@@ -98,8 +100,8 @@ def procTutorial_2(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:  # 電話に出るをタップ
-            PlaySound("sound/tutorial1.wav")
+        if sTappedArea == 0 and cPlayer.getSoundEnd() == True:  # 電話に出るをタップ
+            cPlayer.playSoundEndCheck("sound/tutorial1.wav")
             sStartTime = cState.updateState("TUTORIAL_3")
             dictArgument["Start time"] = sStartTime
 
@@ -108,6 +110,7 @@ def procTutorial_2(dictArgument):
 def procTutorial_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cPlayer = dictArgument["Player"]
 
     if event == "TUTORIAL_3":
         vPosition = pyautogui.position()
@@ -115,8 +118,8 @@ def procTutorial_3(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:  # 次へをタップ
-            PlaySound("sound/tutorial2.wav")
+        if sTappedArea == 0 and cPlayer.getSoundEnd() == True:  # 次へをタップ
+            cPlayer.playSoundEndCheck("sound/tutorial2.wav")
             sStartTime = cState.updateState("TUTORIAL_4")
             dictArgument["Start time"] = sStartTime
 
@@ -126,14 +129,15 @@ def procTutorial_4(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
     cCtrlCard = dictArgument["CtrlCard"]
-
+    cPlayer = dictArgument["Player"]
+    
     if event == "TUTORIAL_4":
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
         print(sTappedArea)
 
-        if sTappedArea == 0:  # 次へをタップ
+        if sTappedArea == 0 and cPlayer.getSoundEnd() == True:  # 次へをタップ
             cCtrlCard.write_result("tutorial", "T")
             sStartTime = cState.updateState("TUTORIAL_5")
             dictArgument["Start time"] = sStartTime

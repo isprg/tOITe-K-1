@@ -109,6 +109,7 @@ def procFinal_0(dictArgument):
 def procFinal_1(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cPlayer = dictArgument["Player"]
     listCorrectNumber = [1, 9, 2, 8]
 
     if dictArgument["Option"] == 0 or dictArgument["Option"][0] == 0:
@@ -121,13 +122,13 @@ def procFinal_1(dictArgument):
         print(sTappedArea)
 
         if sTappedArea >= 1:
-            PlaySound("sound/button1.wav")
+            cPlayer.playSound("sound/button1.wav")
             if dictArgument["Option"][0] < 4:
                 dictArgument["Option"][dictArgument["Option"]
                                        [0] + 1] = sTappedArea
                 dictArgument["Option"][0] += 1
             else:
-                PlaySound("sound/wrong.wav")
+                cPlayer.playSound("sound/wrong.wav")
                 dictArgument["Option"][0] = 0
                 sStartTime = cState.updateState("FINAL_1_WRONG")
                 dictArgument["Start time"] = sStartTime
@@ -136,11 +137,11 @@ def procFinal_1(dictArgument):
         elif sTappedArea == 0:
             dictArgument["Option"][0] = 0
             if dictArgument["Option"][1:5] == listCorrectNumber:
-                PlaySound(["sound/call.wav", "sound/final1.wav"])
+                cPlayer.playSoundEndCheck(["sound/call.wav", "sound/final1.wav"])
                 sStartTime = cState.updateState("SR_Q")
                 dictArgument["Start time"] = sStartTime
             else:
-                PlaySound("sound/wrong.wav")
+                cPlayer.playSound("sound/wrong.wav")
                 sStartTime = cState.updateState("FINAL_1_WRONG")
                 dictArgument["Start time"] = sStartTime
 

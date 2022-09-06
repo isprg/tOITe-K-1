@@ -13,6 +13,7 @@ from functions.CardFunc import *
 from functions.common import getDictFlag
 from Classes.ClsCtrlStateAndWindow import ClsCtrlStateAndWindow
 from Classes.ClsAudioSensor import ClsAudioSensor
+from Classes.ClsSoundPlay import ClsSoundPlay
 
 if os.name == 'nt':
     from Classes.ClsCtrlCardDummy import ClsCtrlCard
@@ -82,8 +83,9 @@ def setModeFuncsAndLayouts(blDebug):
 
 # メインスレッド =======================================================
 def mainThread():
-    blDebug = False
+    blDebug = True
     cAudio = setEnvironment()
+    cPlayer = ClsSoundPlay()
     cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
     cCtrlCard = ClsCtrlCard(dictFlag)
 
@@ -99,6 +101,7 @@ def mainThread():
         "CtrlCard": cCtrlCard,
         "ImageProc": None,
         "AudioSensor": cAudio,
+        "Player": cPlayer,
         "Event": None,
         "Values": None,
         "Frame": 0,

@@ -67,27 +67,29 @@ def procSR_Q(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
     cAudio = dictArgument["AudioSensor"]
+    cPlayer = dictArgument["Player"]
 
     if event == "SR_Q":
         vPosition = pyautogui.position()
         listArea = getAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
-        if sTappedArea == 0 and cAudio.getRecording() == False:
+        if sTappedArea == 0 and cAudio.getRecording() == False and cPlayer.getSoundEnd() == True:
             print("start recording")
-            PlaySound("sound/button1.wav")
+            cPlayer.playSound("sound/button1.wav")
             cAudio.startRecordThread()
-        elif sTappedArea == 1 and cAudio.getRecording() == True:
+        elif sTappedArea == 1 and cAudio.getRecording() == True and cPlayer.getSoundEnd() == True:
             print("stop recording")
-            PlaySound("sound/button1.wav")
+            cPlayer.playSound("sound/button1.wav")
             cAudio.setRecording(False)
             cAudio.record("test.wav")
 
             if judgeAudio("くらわんか", "test.wav"):
-                PlaySound(["sound/correct.wav", "sound/final234.wav"])
+                cPlayer.playSoundEndCheck(["sound/correct_tahei.wav", "sound/final234.wav"])
                 sStartTime = cState.updateState("SR_CORRECT")
                 dictArgument["Start time"] = sStartTime
             else:
+                cPlayer.playSound("sound/wrong_tahei.wav")
                 sStartTime = cState.updateState("SR_WRONG")
                 dictArgument["Start time"] = sStartTime
 
@@ -96,13 +98,14 @@ def procSR_Correct(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
     cCtrlCard = dictArgument["CtrlCard"]
+    cPlayer = dictArgument["Player"]
 
     if event == "SR_CORRECT":
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
-        if sTappedArea == 0:
+        if sTappedArea == 0 and cPlayer.getSoundEnd() == True:
             cCtrlCard.write_result("voice", "T")
             sStartTime = cState.updateState("FINAL_2")
             dictArgument["Start time"] = sStartTime
