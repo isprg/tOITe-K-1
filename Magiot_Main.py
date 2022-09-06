@@ -83,7 +83,7 @@ def setModeFuncsAndLayouts(blDebug):
 
 # メインスレッド =======================================================
 def mainThread():
-    blDebug = True
+    blDebug = False
     cAudio = setEnvironment()
     cPlayer = ClsSoundPlay()
     cState, dictProc, dictFlag = setModeFuncsAndLayouts(blDebug)
