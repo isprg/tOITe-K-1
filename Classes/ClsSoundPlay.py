@@ -16,8 +16,9 @@ class ClsSoundPlay:
                 subprocess.Popen(
                     ["sh", "sound/play.sh", " ".join(strFileName)])
         else:
-            subprocess.Popen(
-                ["powershell", "-c", f"(New-Object Media.SoundPlayer '{strFileName}').PlaySync();"])
+            if isinstance(strFileName, str):
+                subprocess.Popen(
+                    ["powershell", "-c", f"(New-Object Media.SoundPlayer '{strFileName}').PlaySync();"])
 
     def playSoundSync(self, strFileName):
         self.blSoundEnd = False
@@ -28,8 +29,9 @@ class ClsSoundPlay:
             elif isinstance(strFileName, list):
                 subprocess.run(["sh", "sound/play.sh", " ".join(strFileName)])
         else:
-            subprocess.run(
-                ["powershell", "-c", f"(New-Object Media.SoundPlayer '{strFileName}').PlaySync();"])
+            if isinstance(strFileName, str):
+                subprocess.run(
+                    ["powershell", "-c", f"(New-Object Media.SoundPlayer '{strFileName}').PlaySync();"])
 
         self.blSoundEnd = True
 

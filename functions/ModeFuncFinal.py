@@ -137,7 +137,8 @@ def procFinal_1(dictArgument):
         elif sTappedArea == 0:
             dictArgument["Option"][0] = 0
             if dictArgument["Option"][1:5] == listCorrectNumber:
-                cPlayer.playSoundEndCheck(["sound/call.wav", "sound/final1.wav"])
+                cPlayer.playSoundEndCheck(
+                    ["sound/2call.wav", "sound/final1.wav"])
                 sStartTime = cState.updateState("SR_Q")
                 dictArgument["Start time"] = sStartTime
             else:
@@ -200,6 +201,7 @@ def procFinal_2(dictArgument):
 def procFinal_3(dictArgument):
     event = dictArgument["Event"]
     cState = dictArgument["State"]
+    cPlayer = dictArgument["Player"]
 
     if event == "FINAL_3":
         vPosition = pyautogui.position()
@@ -208,11 +210,12 @@ def procFinal_3(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == 1:
-            PlaySound(["sound/correct.wav", "sound/final234.wav"])
+            cPlayer.playSoundEndCheck(
+                ["sound/correct_tahei.wav", "sound/final23.wav"])
             sStartTime = cState.updateState("SR_CORRECT")
             dictArgument["Start time"] = sStartTime
         elif sTappedArea == 0 or sTappedArea == 2 or sTappedArea == 3:
-            PlaySound("sound/wrong.wav")
+            cPlayer.playSound("sound/wrong_tahei.wav")
             sStartTime = cState.updateState("FINAL_3_WRONG")
             dictArgument["Start time"] = sStartTime
 

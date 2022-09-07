@@ -9,6 +9,7 @@ logger = getLogger("tOITe-K-1").getChild("CardFunc")
 def SetGame_FromCard(dictArgument):
     cCtrlCard = dictArgument["CtrlCard"]
     cState = dictArgument["State"]
+    cPlayer = dictArgument["Player"]
 
     dictSaveData = cCtrlCard.read_result()
     print("Save Data:", dictSaveData)
@@ -18,6 +19,7 @@ def SetGame_FromCard(dictArgument):
         dictArgument["Start time"] = sStartTime
 
     elif dictSaveData["tutorial"] != "T":
+        cPlayer.playSoundEndCheck(["title_call_1.wav", "title_call_2.wav"])
         sStartTime = cState.updateState("TUTORIAL_0")
         dictArgument["Start time"] = sStartTime
 

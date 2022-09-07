@@ -13,7 +13,7 @@ logger = getLogger("tOITe-K-1").getChild("Tutorial")
 def updateDictProc_Tutorial(dictProc):
     dictProc_this = {
         "TUTORIAL_0": procTutorial_0,
-        #"TUTORIAL_1": procTutorial_1,
+        # "TUTORIAL_1": procTutorial_1,
         "TUTORIAL_2": procTutorial_2,
         "TUTORIAL_3": procTutorial_3,
         "TUTORIAL_4": procTutorial_4,
@@ -72,7 +72,7 @@ def procTutorial_0(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == -1:  # 次へをタップ
-            cPlayer.playSoundEndCheck("sound/call.wav")
+            cPlayer.playSoundEndCheck("sound/3call.wav")
             sStartTime = cState.updateState("TUTORIAL_2")
             dictArgument["Start time"] = sStartTime
 
@@ -130,7 +130,7 @@ def procTutorial_4(dictArgument):
     cState = dictArgument["State"]
     cCtrlCard = dictArgument["CtrlCard"]
     cPlayer = dictArgument["Player"]
-    
+
     if event == "TUTORIAL_4":
         vPosition = pyautogui.position()
         listArea = getDefaultAreaDefinition()

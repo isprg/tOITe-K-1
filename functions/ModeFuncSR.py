@@ -85,7 +85,8 @@ def procSR_Q(dictArgument):
             cAudio.record("test.wav")
 
             if judgeAudio("くらわんか", "test.wav"):
-                cPlayer.playSoundEndCheck(["sound/correct_tahei.wav", "sound/final234.wav"])
+                cPlayer.playSoundEndCheck(
+                    ["sound/correct_tahei.wav", "sound/final23.wav"])
                 sStartTime = cState.updateState("SR_CORRECT")
                 dictArgument["Start time"] = sStartTime
             else:
@@ -106,6 +107,7 @@ def procSR_Correct(dictArgument):
         sTappedArea = CheckTappedArea(vPosition, listArea)
 
         if sTappedArea == 0 and cPlayer.getSoundEnd() == True:
+            cPlayer.playSoundEndCheck("sound/final4.wav")
             cCtrlCard.write_result("voice", "T")
             sStartTime = cState.updateState("FINAL_2")
             dictArgument["Start time"] = sStartTime
