@@ -4,7 +4,7 @@ import pyautogui
 
 from functions.setGUI import setGUI
 from functions.common import PlaySound, CheckTappedArea
-from functions.DesignLayout import make_fullimage_layout
+from functions.DesignLayout import make_fullimage_layout, make_4choice_layout
 
 logger = getLogger("tOITe-K-1").getChild("Final")
 
@@ -32,8 +32,8 @@ def updateDictWindow_Final(dictWindow):
     # layout1correct = make_fullimage_layout(
     #     "png/final01correct.png", "FINAL_1_CORRECT")
     layout2 = make_fullimage_layout("png/final02.png", "FINAL_2")
-    layout3 = make_fullimage_layout(
-        "png/final03.png", "FINAL_3")
+    layout3 = make_4choice_layout(
+        "png/final03.png", ["いまりやき", "くらわんか", "ごんぼじる", "くろでんわ"])
     layout3wrong = make_fullimage_layout(
         "png/final03wrong.png", "FINAL_3_WRONG")
 
@@ -192,7 +192,6 @@ def procFinal_2(dictArgument):
         print(sTappedArea)
 
         if sTappedArea == 0:  # 次へをタップ
-            cCtrlCard.write_result("complete", "T")
             sStartTime = cState.updateState("CLEAR")
             dictArgument["Start time"] = sStartTime
 
@@ -203,21 +202,15 @@ def procFinal_3(dictArgument):
     cState = dictArgument["State"]
     cPlayer = dictArgument["Player"]
 
-    if event == "FINAL_3":
-        vPosition = pyautogui.position()
-        listArea = get4ChoiceAreaDefinition()
-        sTappedArea = CheckTappedArea(vPosition, listArea)
-        print(sTappedArea)
-
-        if sTappedArea == 1:
-            cPlayer.playSoundEndCheck(
-                ["sound/correct_tahei.wav", "sound/final23.wav"])
-            sStartTime = cState.updateState("SR_CORRECT")
-            dictArgument["Start time"] = sStartTime
-        elif sTappedArea == 0 or sTappedArea == 2 or sTappedArea == 3:
-            cPlayer.playSound("sound/wrong_tahei.wav")
-            sStartTime = cState.updateState("FINAL_3_WRONG")
-            dictArgument["Start time"] = sStartTime
+    if event == "くらわんか":
+        cPlayer.playSoundEndCheck(
+            ["sound/correct_tahei.wav", "sound/final23.wav"])
+        sStartTime = cState.updateState("SR_CORRECT")
+        dictArgument["Start time"] = sStartTime
+    elif event == "いまりやき" or event == "ごんぼじる" or event == "くろでんわ":
+        cPlayer.playSound("sound/wrong_tahei.wav")
+        sStartTime = cState.updateState("FINAL_3_WRONG")
+        dictArgument["Start time"] = sStartTime
 
 
 # 4択不正解

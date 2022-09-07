@@ -156,15 +156,12 @@ def mainThread():
 
 # メイン関数 =================================================
 if __name__ == "__main__":
-    try:
-        while True:
-            Admin_CardID = mainThread()
-            adminCommand = AdminMode(Admin_CardID)
+    while True:
+        Admin_CardID = mainThread()
+        adminCommand = AdminMode(Admin_CardID)
 
-            if os.name == 'nt':
-                adminCommand = "end"
+        if os.name == 'nt':
+            adminCommand = "end"
 
-            if adminCommand == "end":
-                break
-    except KeyboardInterrupt:
-        pass
+        if adminCommand == "end":
+            break

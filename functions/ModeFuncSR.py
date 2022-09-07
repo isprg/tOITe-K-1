@@ -109,6 +109,7 @@ def procSR_Correct(dictArgument):
         if sTappedArea == 0 and cPlayer.getSoundEnd() == True:
             cPlayer.playSoundEndCheck("sound/final4.wav")
             cCtrlCard.write_result("voice", "T")
+            cCtrlCard.write_result("complete", "T")
             sStartTime = cState.updateState("FINAL_2")
             dictArgument["Start time"] = sStartTime
 
