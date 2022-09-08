@@ -46,6 +46,9 @@ class ClsCtrlCard:
 		self.ClsCardIF.sense()
 		return self.ClsCardIF.initTag(force=True)
 
+	def initID(self):
+		self.ClsCardIF.initID()
+
 	def getID(self):
 		return self.CurrentID
 

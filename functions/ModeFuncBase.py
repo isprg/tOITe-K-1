@@ -57,6 +57,7 @@ def getDefaultAreaDefinition():
 def standbyModeProc(dictArgument):
     cCtrlCard = dictArgument["CtrlCard"]
 
+    cCtrlCard.initID()
     setFlag = cCtrlCard.setCard()
 
     if setFlag:

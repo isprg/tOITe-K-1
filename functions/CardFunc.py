@@ -19,7 +19,8 @@ def SetGame_FromCard(dictArgument):
         dictArgument["Start time"] = sStartTime
 
     elif dictSaveData["tutorial"] != "T":
-        cPlayer.playSoundEndCheck(["title_call_1.wav", "title_call_2.wav"])
+        cPlayer.playSoundEndCheck(
+            ["sound/card_set.wav", "sound/title_call_1.wav", "sound/title_call_2.wav"])
         sStartTime = cState.updateState("TUTORIAL_0")
         dictArgument["Start time"] = sStartTime
 

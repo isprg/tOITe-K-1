@@ -23,6 +23,9 @@ class ClsCardIF:
         # *argsがないとclose時にエラーが発生し, 正常にcloseできません.
         self.close()
 
+    def initID(self):
+        self.currentIdm = None
+
     def getID(self) -> str or None:
         # タグのIDを文字列で返す関数
         return self.currentIdm
